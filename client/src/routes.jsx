@@ -5,6 +5,10 @@ import Home from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Dashboard from "./pages/DashboardPage";
+import AIToolsPage from "./pages/AIToolsPage";
+import HistoryPage from "./pages/HistoryPage";
+import BillingPage from "./pages/BillingPage";
+import ProfilePage from "./pages/ProfilePage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -23,7 +27,13 @@ const router = createBrowserRouter([
             <DashboardLayout />
           </ProtectedRoute>
         ),
-        children: [{ index: true, Component: Dashboard }],
+        children: [
+          { index: true, Component: Dashboard },
+          { path: "ai-tools", Component: AIToolsPage },
+          { path: "history", Component: HistoryPage },
+          { path: "billing", Component: BillingPage },
+          { path: "profile", Component: ProfilePage },
+        ],
       },
     ],
   },

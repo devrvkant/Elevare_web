@@ -53,6 +53,7 @@ DashboardLayout (layouts/DashboardLayout.jsx)
 ## Responsive Behavior
 
 ### Mobile (< 1024px)
+
 ```
 ┌─────────────────────────┐
 │  MobileHeader           │ ← Hamburger, Logo, User
@@ -78,6 +79,7 @@ DashboardLayout (layouts/DashboardLayout.jsx)
 ```
 
 ### Desktop (≥ 1024px)
+
 ```
 ┌──────────┬──────────────────────────────────┐
 │          │  Desktop Header                  │ ← Welcome, Bell, User
@@ -102,11 +104,13 @@ DashboardLayout (layouts/DashboardLayout.jsx)
 ## State Management
 
 ### Sidebar State
+
 - `isOpen`: Boolean (controlled by MobileHeader)
 - `setIsOpen`: Function to toggle sidebar
 - Active menu item tracked by URL path
 
 ### Component Props Flow
+
 ```
 DashboardLayout
   ├── sidebarOpen (state) ──→ Sidebar (isOpen)
@@ -152,6 +156,7 @@ HistorySection.jsx
 ## Styling Approach
 
 ### Tailwind Classes Used
+
 - **Layout**: `flex`, `grid`, `sticky`, `fixed`, `absolute`
 - **Responsive**: `lg:`, `md:`, `sm:` breakpoints
 - **Colors**: Gradient combinations (pink, purple, violet, blue)
@@ -161,6 +166,7 @@ HistorySection.jsx
 - **Borders**: `border`, `rounded-xl`, `rounded-2xl`
 
 ### Custom Animations
+
 - Smooth transitions: `transition-all duration-300`
 - Scale on hover: `hover:scale-110`
 - Shadow elevation: `hover:shadow-xl`
@@ -183,6 +189,7 @@ theme.js             ─── 1.8 KB  (62 lines)
 ## Performance Considerations
 
 ✅ **Optimizations Applied:**
+
 - No unnecessary re-renders (proper component separation)
 - Efficient state management (only sidebar state)
 - CSS-only animations (no JavaScript animations)
@@ -192,6 +199,7 @@ theme.js             ─── 1.8 KB  (62 lines)
 ## Accessibility Features
 
 ✅ **WCAG Compliant:**
+
 - Semantic HTML elements
 - ARIA labels on interactive elements
 - Keyboard navigation support

@@ -1,6 +1,6 @@
-import HeroSection from '../components/dashboard/Hero/HeroSection';
-import AIToolsSection from '../components/dashboard/AITools/AIToolsSection';
-import HistorySection from '../components/dashboard/History/HistorySection';
+import HeroSection from "../components/dashboard/Hero/HeroSection";
+import AIToolsSection from "../components/dashboard/AITools/AIToolsSection";
+import HistorySection from "../components/dashboard/History/HistorySection";
 
 const Dashboard = () => {
   return (

@@ -12,8 +12,9 @@ const HeroSection = () => {
           AI Career Coach Agent
         </h1>
         <p className="text-white/90 text-base md:text-lg mb-6 max-w-3xl leading-relaxed">
-          Smarter career decisions start here — get tailored advice, real-time market insights, 
-          and a roadmap built just for you with the power of AI.
+          Smarter career decisions start here — get tailored advice, real-time
+          market insights, and a roadmap built just for you with the power of
+          AI.
         </p>
         <button className="bg-white text-purple-600 font-semibold px-6 py-3 rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-200">
           Let's Get Started

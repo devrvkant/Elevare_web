@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router';
-import { UserButton, useUser } from '@clerk/clerk-react';
-import Sidebar from '../components/dashboard/Sidebar/Sidebar';
-import MobileHeader from '../components/dashboard/MobileHeader';
+import { useState } from "react";
+import { Outlet } from "react-router";
+import { UserButton, useUser } from "@clerk/clerk-react";
+import Sidebar from "../components/dashboard/Sidebar/Sidebar";
+import MobileHeader from "../components/dashboard/MobileHeader";
 
 const DashboardLayout = () => {
   const { user } = useUser();
@@ -23,7 +23,7 @@ const DashboardLayout = () => {
           <div className="px-8 py-4 flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
-                Welcome back, {user?.firstName || 'User'}! 👋
+                Welcome back, {user?.firstName || "User"}! 👋
               </h2>
               <p className="text-sm text-gray-500 mt-1">
                 Let's build something amazing today

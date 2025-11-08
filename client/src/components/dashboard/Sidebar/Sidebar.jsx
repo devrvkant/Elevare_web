@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation } from "react-router";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
@@ -6,35 +6,35 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const menuItems = [
     {
-      id: 'workspace',
-      label: 'Workspace',
-      icon: '📚',
-      path: '/dashboard',
-      description: 'Build Awesome Skills',
+      id: "workspace",
+      label: "Workspace",
+      icon: "📚",
+      path: "/dashboard",
+      description: "Build Awesome Skills",
     },
     {
-      id: 'ai-tools',
-      label: 'AI Tools',
-      icon: '🤖',
-      path: '/dashboard/ai-tools',
+      id: "ai-tools",
+      label: "AI Tools",
+      icon: "🤖",
+      path: "/dashboard/ai-tools",
     },
     {
-      id: 'history',
-      label: 'My History',
-      icon: '📝',
-      path: '/dashboard/history',
+      id: "history",
+      label: "My History",
+      icon: "📝",
+      path: "/dashboard/history",
     },
     {
-      id: 'billing',
-      label: 'Billing',
-      icon: '💳',
-      path: '/dashboard/billing',
+      id: "billing",
+      label: "Billing",
+      icon: "💳",
+      path: "/dashboard/billing",
     },
     {
-      id: 'profile',
-      label: 'Profile',
-      icon: '👤',
-      path: '/dashboard/profile',
+      id: "profile",
+      label: "Profile",
+      icon: "👤",
+      path: "/dashboard/profile",
     },
   ];
 
@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           bg-white border-r border-gray-200
           transition-transform duration-300 ease-in-out
           z-50 lg:z-0
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           w-64 flex flex-col
         `}
       >
@@ -69,12 +69,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-violet-600 bg-clip-text text-transparent">
-                AI CAREER
+                ELEVARE
               </h1>
               <p className="text-xs text-gray-500 font-medium">COACH AGENT</p>
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-3 italic">Build Awesome Skills</p>
+          <p className="text-xs text-gray-400 mt-3 italic">
+            Build Awesome Skills
+          </p>
         </div>
 
         {/* Menu Items */}
@@ -92,8 +94,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     transition-all duration-200
                     ${
                       isActive(item.path)
-                        ? 'bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 border border-purple-200 shadow-sm'
-                        : 'text-gray-700 hover:bg-gray-50 border border-transparent'
+                        ? "bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 border border-purple-200 shadow-sm"
+                        : "text-gray-700 hover:bg-gray-50 border border-transparent"
                     }
                   `}
                 >
@@ -101,7 +103,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <div className="flex-1 text-left">
                     <span className="font-medium text-sm">{item.label}</span>
                     {item.description && (
-                      <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {item.description}
+                      </p>
                     )}
                   </div>
                 </button>
