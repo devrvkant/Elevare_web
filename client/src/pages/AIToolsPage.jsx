@@ -6,11 +6,13 @@ const AIToolsPage = () => {
         <p className="text-gray-600 mb-6">
           Explore all available AI-powered tools to boost your career.
         </p>
-        
+
         <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border border-purple-200">
           <div className="text-center">
             <div className="text-5xl mb-4">🚀</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Coming Soon!</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Coming Soon!
+            </h2>
             <p className="text-gray-600">
               This page is under development. Stay tuned for amazing AI tools!
             </p>

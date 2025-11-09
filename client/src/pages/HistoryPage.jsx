@@ -6,11 +6,13 @@ const HistoryPage = () => {
         <p className="text-gray-600 mb-6">
           View all your previous activities and work history.
         </p>
-        
+
         <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-200">
           <div className="text-center">
             <div className="text-5xl mb-4">📜</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Coming Soon!</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Coming Soon!
+            </h2>
             <p className="text-gray-600">
               Your complete work history will be available here soon.
             </p>

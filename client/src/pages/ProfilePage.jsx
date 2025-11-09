@@ -21,17 +21,22 @@ const ProfilePage = () => {
               <h2 className="text-xl font-bold text-gray-900">
                 {user?.firstName} {user?.lastName}
               </h2>
-              <p className="text-gray-600">{user?.primaryEmailAddress?.emailAddress}</p>
+              <p className="text-gray-600">
+                {user?.primaryEmailAddress?.emailAddress}
+              </p>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-6 border border-orange-200">
           <div className="text-center">
             <div className="text-5xl mb-4">⚙️</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Profile Settings Coming Soon!</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Profile Settings Coming Soon!
+            </h2>
             <p className="text-gray-600">
-              Advanced profile customization and settings will be available here soon.
+              Advanced profile customization and settings will be available here
+              soon.
             </p>
           </div>
         </div>
