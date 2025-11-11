@@ -5,4 +5,6 @@ dotenv.config();   // Load environment variables from .env file
 export const config = {
     port: process.env.PORT || 5500,
     mongoDbUri: process.env.MONGODB_URI,
+    elevareAiApiKey: process.env.ELEVARE_AI_API_KEY,
+    flaskApiUrl: process.env.FLASK_API_URL,
 }

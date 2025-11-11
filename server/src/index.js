@@ -2,6 +2,8 @@ import express from "express";
 // import cors from "cors";
 import { config } from "./config/env.js";
 import connectToMongoDB from "./lib/mongodb.js";
+import careerRouter from "./routes/carrer.routes.js";
+import roadmapRouter from "./routes/roadmap.routes.js";
 
 const PORT = config.port || 5500;
 const app = express();
@@ -25,6 +27,8 @@ app.use(express.json()); // allow us to parse incoming requests :- req.body
 app.get("/", (req, res) => {
   res.send("Welcome to Elevare Server!");
 });
+app.use("/api/career", careerRouter);
+app.use("/api/roadmap", roadmapRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT : ${PORT}`);
