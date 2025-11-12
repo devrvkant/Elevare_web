@@ -1,6 +1,10 @@
+import { useState } from "react";
 import AIToolCard from "./AIToolCard";
+import CareerPredictionModal from "../Career/CareerPredictionModal";
 
 const AIToolsSection = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const tools = [
     {
       id: "career-qa",
@@ -37,8 +41,11 @@ const AIToolsSection = () => {
   ];
 
   const handleToolClick = (tool) => {
-    console.log("Tool clicked:", tool.id);
-    // Add navigation or modal logic here
+    if (tool.id === "roadmap-generator") {
+      setModalOpen(true);
+    } else {
+      console.log("Tool clicked:", tool.id);
+    }
   };
 
   return (
@@ -57,6 +64,9 @@ const AIToolsSection = () => {
           <AIToolCard key={tool.id} tool={tool} onClick={handleToolClick} />
         ))}
       </div>
+
+      {/* Career Prediction Modal */}
+      <CareerPredictionModal open={modalOpen} onOpenChange={setModalOpen} />
     </section>
   );
 };

@@ -168,3 +168,21 @@
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, #4f46e5, #7c3aed);
 }
+
+/* Thin scrollbar for dialogs/modals */
+.dialog-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-thumb {
+  background: #d8b4fe;
+  border-radius: 2px;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c084fc;
+}
