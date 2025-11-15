@@ -5,10 +5,8 @@ import Home from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Dashboard from "./pages/DashboardPage";
-import AIToolsPage from "./pages/AIToolsPage";
-import HistoryPage from "./pages/HistoryPage";
-import BillingPage from "./pages/BillingPage";
 import ProfilePage from "./pages/ProfilePage";
+import RoadmapsPage from "./pages/RoadmapsPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -29,9 +27,7 @@ const router = createBrowserRouter([
         ),
         children: [
           { index: true, Component: Dashboard },
-          { path: "ai-tools", Component: AIToolsPage },
-          { path: "history", Component: HistoryPage },
-          { path: "billing", Component: BillingPage },
+          { path: "roadmaps", Component: RoadmapsPage },
           { path: "profile", Component: ProfilePage },
         ],
       },

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { v4 as uuidv4 } from "uuid";
 import {
   Dialog,
   DialogContent,
@@ -20,12 +22,24 @@ import {
   setStatus,
   setError,
 } from "@/features/career/careerSlice";
+import {
+  startStreaming,
+  appendStreamingContent,
+  completeStreaming,
+  failStreaming,
+} from "@/redux/slices/roadmapSlice";
+import { streamRoadmap, roadmapApi } from "@/redux/api/roadmapApi";
 import { X, Sparkles, TrendingUp, Loader2 } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function CareerPredictionModal({ open, onOpenChange }) {
+  const {user} = useUser();
+  const userId = user ? user.id : null;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { lastPrediction, formData } = useSelector((state) => state.career);
   const [predictCareer, { isLoading }] = usePredictCareerMutation();
+  const [isGeneratingRoadmap, setIsGeneratingRoadmap] = useState(false);
 
   const [localForm, setLocalForm] = useState({
     course: "",
@@ -111,6 +125,63 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
       skills: "",
       interests: "",
     });
+  };
+
+  const handleGenerateRoadmap = async () => {
+    if (!lastPrediction) return;
+
+    setIsGeneratingRoadmap(true);
+
+    // Generate a unique UUID for this roadmap
+    const roadmapId = uuidv4();
+
+    // Start streaming
+    dispatch(startStreaming({ id: roadmapId, career: lastPrediction }));
+
+    // Navigate to the roadmap page immediately
+    navigate(`/dashboard/roadmaps/${roadmapId}`);
+
+    // Close the modal
+    onOpenChange(false);
+
+    // Start SSE streaming
+    try {
+      streamRoadmap(
+        lastPrediction,
+        roadmapId,
+        userId,
+        (chunk) => {
+          // On each chunk
+          dispatch(appendStreamingContent({ chunk }));
+        },
+        (finalContent) => {
+          // On complete
+          dispatch(completeStreaming({ content: finalContent }));
+          setIsGeneratingRoadmap(false);
+          
+          // Invalidate the roadmaps cache to refetch the list
+          dispatch(roadmapApi.util.invalidateTags(["Roadmaps"]));
+        },
+        (error) => {
+          // On error
+          console.error("Roadmap streaming error:", error);
+          const errorMessage = error.message || "Failed to generate roadmap. Please try again.";
+          
+          dispatch(failStreaming({
+            message: errorMessage,
+            id: roadmapId
+          }));
+          setIsGeneratingRoadmap(false);
+        }
+      );
+    } catch (error) {
+      console.error("Failed to start roadmap generation:", error);
+      dispatch(failStreaming({
+        message: error.message || "Failed to start generation",
+        id: roadmapId
+      }));
+      setIsGeneratingRoadmap(false);
+    }
   };
 
   return (
@@ -261,14 +332,21 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
 
               {/* Generate Roadmap Button */}
               <Button
-                onClick={() => {
-                  // Will be wired to roadmap generation
-                  console.log("Generate roadmap for:", lastPrediction);
-                }}
+                onClick={handleGenerateRoadmap}
+                disabled={isGeneratingRoadmap}
                 className="w-full mt-6 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold shadow-md hover:shadow-lg transition-all"
               >
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Generate Career Roadmap
+                {isGeneratingRoadmap ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Initializing...
+                  </>
+                ) : (
+                  <>
+                    <TrendingUp className="w-5 h-5 mr-2" />
+                    Generate Career Roadmap
+                  </>
+                )}
               </Button>
             </div>
 

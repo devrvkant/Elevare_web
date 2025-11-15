@@ -13,22 +13,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       description: "Build Awesome Skills",
     },
     {
-      id: "ai-tools",
-      label: "AI Tools",
-      icon: "🤖",
-      path: "/dashboard/ai-tools",
-    },
-    {
-      id: "history",
-      label: "My History",
-      icon: "📝",
-      path: "/dashboard/history",
-    },
-    {
-      id: "billing",
-      label: "Billing",
-      icon: "💳",
-      path: "/dashboard/billing",
+      id: "roadmaps",
+      label: "Roadmaps",
+      icon: "🗺️",
+      path: "/dashboard/roadmaps",
+      description: "Your Career Paths",
     },
     {
       id: "profile",

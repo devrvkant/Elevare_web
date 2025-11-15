@@ -1,7 +1,7 @@
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-if (!PUBLISHABLE_KEY) throw new Error("Missing Clerk Publishable Key!");
-
-const env = { PUBLISHABLE_KEY };
-
-export default env;
+export const config = {
+  publishableKey: PUBLISHABLE_KEY,
+  apiUrl: API_URL,
+}
