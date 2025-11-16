@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const roadmapSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     userId: {
       type: String,
       required: true,
@@ -18,7 +13,7 @@ const roadmapSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
+      default: "",
     },
     steps: {
       type: [

@@ -1,5 +1,12 @@
 import { useNavigate } from "react-router";
-import { MapPin, Clock, TrendingUp, Plus, Sparkles, Loader2 } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  TrendingUp,
+  Plus,
+  Sparkles,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetUserRoadmapsQuery } from "../redux/api/roadmapApi";
 import { useUser } from "@clerk/clerk-react";
@@ -8,12 +15,12 @@ export default function RoadmapsPage() {
   const { user } = useUser();
   const userId = user ? user.id : null;
   const navigate = useNavigate();
-  
-  const { 
-    data: roadmaps = [], 
-    isLoading, 
+
+  const {
+    data: roadmaps = [],
+    isLoading,
     isError,
-    error 
+    error,
   } = useGetUserRoadmapsQuery(userId, {
     skip: !userId,
     refetchOnMountOrArgChange: true,
@@ -71,7 +78,9 @@ export default function RoadmapsPage() {
           <h3 className="text-xl font-semibold text-gray-800">
             Loading your roadmaps...
           </h3>
-          <p className="text-gray-600">Please wait while we fetch your career paths</p>
+          <p className="text-gray-600">
+            Please wait while we fetch your career paths
+          </p>
         </div>
       </div>
     );
@@ -110,9 +119,7 @@ export default function RoadmapsPage() {
           <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            Please Sign In
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800">Please Sign In</h2>
           <p className="text-gray-600">
             You need to be signed in to view your roadmaps.
           </p>
@@ -167,7 +174,8 @@ export default function RoadmapsPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-800">
-                    {roadmaps.length && roadmaps.filter((r) => r.status === "completed").length}
+                    {roadmaps.length &&
+                      roadmaps.filter((r) => r.status === "completed").length}
                   </p>
                   <p className="text-sm text-gray-600">Completed</p>
                 </div>
@@ -181,7 +189,8 @@ export default function RoadmapsPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-800">
-                    {roadmaps.length && roadmaps.filter((r) => r.status === "streaming").length}
+                    {roadmaps.length &&
+                      roadmaps.filter((r) => r.status === "streaming").length}
                   </p>
                   <p className="text-sm text-gray-600">In Progress</p>
                 </div>
@@ -215,8 +224,8 @@ export default function RoadmapsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {roadmaps.map((roadmap) => (
               <div
-                key={roadmap.id}
-                onClick={() => navigate(`/dashboard/roadmaps/${roadmap.id}`)}
+                key={roadmap._id}
+                onClick={() => navigate(`/dashboard/roadmaps/${roadmap._id}`)}
                 className="bg-white rounded-2xl p-6 border border-purple-100 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
                 {/* Status Badge */}
@@ -236,10 +245,11 @@ export default function RoadmapsPage() {
                   {roadmap.career}
                 </h3>
 
-                {/* Steps Count */}
+                {/* Node Count */}
                 {roadmap.steps && roadmap.steps.length > 0 && (
-                  <p className="text-sm text-gray-600 mb-4">
-                    {roadmap.steps.length} steps to master
+                  <p className="text-sm text-purple-600 mb-3 font-medium flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5" />
+                    {roadmap.steps.length} learning nodes
                   </p>
                 )}
 
@@ -249,12 +259,25 @@ export default function RoadmapsPage() {
                   {formatDate(roadmap.createdAt)}
                 </div>
 
-                {/* Preview Content */}
-                {roadmap.content && (
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                    {roadmap.content.substring(0, 100)}...
-                  </p>
-                )}
+                {/* Preview Description */}
+                {roadmap.content &&
+                  (() => {
+                    try {
+                      const data = JSON.parse(roadmap.content);
+                      return (
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                          {data.description ||
+                            "Interactive learning roadmap with visual nodes"}
+                        </p>
+                      );
+                    } catch {
+                      return (
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                          {roadmap.content.substring(0, 100)}...
+                        </p>
+                      );
+                    }
+                  })()}
 
                 {/* Action */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">

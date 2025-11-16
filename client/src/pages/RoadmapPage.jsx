@@ -1,17 +1,18 @@
-import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useState, useCallback, useMemo } from "react";
 import {
   ArrowLeft,
   Loader2,
   AlertCircle,
   RefreshCw,
   Target,
-  CheckCircle2,
-  Circle,
-  Zap,
   Sparkles,
+  ExternalLink,
+  Clock,
+  Maximize2,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useGetRoadmapQuery } from "@/redux/api/roadmapApi";
 import {
   ReactFlow,
   Background,
@@ -19,168 +20,213 @@ import {
   MiniMap,
   useNodesState,
   useEdgesState,
-  MarkerType,
+  Handle,
+  Position,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { Button } from "@/components/ui/button";
 
-// Custom node component for roadmap steps
-const StepNode = ({ data }) => {
+// Custom Node Component
+const CustomNode = ({ data }) => {
+  const categoryColors = {
+    fundamentals: "from-blue-500 to-cyan-500",
+    intermediate: "from-purple-500 to-pink-500",
+    advanced: "from-orange-500 to-red-500",
+    specialization: "from-green-500 to-emerald-500",
+  };
+
+  const categoryIcons = {
+    fundamentals: "🎯",
+    intermediate: "🚀",
+    advanced: "⚡",
+    specialization: "💎",
+  };
+
+  const gradient = categoryColors[data.category] || "from-gray-500 to-gray-600";
+  const icon = categoryIcons[data.category] || "📚";
+
   return (
-    <div
-      className={`px-6 py-4 rounded-xl shadow-lg border-2 transition-all duration-300 ${
-        data.completed
-          ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-400"
-          : "bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300"
-      }`}
-    >
-      <div className="flex items-start gap-3">
-        <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-            data.completed
-              ? "bg-green-500"
-              : "bg-gradient-to-br from-pink-500 to-purple-600"
-          }`}
-        >
-          {data.completed ? (
-            <CheckCircle2 className="w-5 h-5 text-white" />
-          ) : (
-            <span className="text-white font-bold text-sm">{data.number}</span>
-          )}
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-gray-800 text-sm mb-1 line-clamp-2">
+    <div className="group">
+      {/* Input Handle (top) - for incoming connections */}
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="w-3 h-3 !bg-purple-500 border-2 border-white"
+      />
+
+      <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 w-[280px]">
+        {/* Header with gradient */}
+        <div className={`bg-gradient-to-r ${gradient} p-4 rounded-t-xl`}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-2xl">{icon}</span>
+            <span className="text-xs font-semibold text-white/90 uppercase tracking-wide">
+              {data.category}
+            </span>
+          </div>
+          <h3 className="text-white font-bold text-lg leading-tight">
             {data.title}
           </h3>
-          {data.description && (
-            <p className="text-xs text-gray-600 line-clamp-3">
-              {data.description}
-            </p>
+        </div>
+
+        {/* Body */}
+        <div className="p-4 space-y-3">
+          <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+            {data.description}
+          </p>
+
+          {data.duration && (
+            <div className="flex items-center gap-2 text-xs text-purple-600">
+              <Clock className="w-3.5 h-3.5" />
+              <span className="font-medium">{data.duration}</span>
+            </div>
+          )}
+
+          {data.learnMoreUrl && (
+            <a
+              href={data.learnMoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-semibold text-purple-600 hover:text-purple-700 transition-colors group-hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span>Learn More</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
           )}
         </div>
       </div>
+
+      {/* Output Handle (bottom) - for outgoing connections */}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="w-3 h-3 !bg-purple-500 border-2 border-white"
+      />
     </div>
   );
 };
 
 const nodeTypes = {
-  stepNode: StepNode,
+  custom: CustomNode,
 };
 
 export default function RoadmapPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { roadmaps, streamingContent, status, error } = useSelector(
-    (state) => state.roadmap
-  );
-  console.log(roadmaps)
-  const [displayedContent, setDisplayedContent] = useState("");
-  const [typingIndex, setTypingIndex] = useState(0);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [selectedNode, setSelectedNode] = useState(null);
 
-  const roadmap = roadmaps[id];
-  const isStreaming = status === "streaming";
-  const hasError = status === "error";
+  // Fetch roadmap from server using MongoDB _id
+  const {
+    data: roadmap,
+    isLoading,
+    isError,
+    error,
+  } = useGetRoadmapQuery(id, {
+    skip: !id,
+  });
 
-  // Generate React Flow nodes and edges from roadmap steps
-  const generateFlowChart = useCallback(
-    (steps) => {
-      if (!steps || steps.length === 0) return;
+  console.log("RoadmapPage Debug:", { id, roadmap, isLoading, isError, error });
 
-      const newNodes = [];
-      const newEdges = [];
-      const verticalSpacing = 180;
-      const horizontalSpacing = 400;
-      const columns = 2; // 2 columns layout
+  // Parse roadmap data and create nodes/edges
+  const { nodes, edges, roadmapData, isOldFormat } = useMemo(() => {
+    if (!roadmap?.content) {
+      return { nodes: [], edges: [], roadmapData: null, isOldFormat: false };
+    }
 
-      steps.forEach((step, index) => {
-        const col = index % columns;
-        const row = Math.floor(index / columns);
+    try {
+      const data = JSON.parse(roadmap.content);
 
-        newNodes.push({
-          id: `step-${index}`,
-          type: "stepNode",
+      // Check if it's the new JSON format with nodes
+      if (!data.nodes || !Array.isArray(data.nodes)) {
+        console.log("Old format detected - no nodes array");
+        return { nodes: [], edges: [], roadmapData: null, isOldFormat: true };
+      }
+
+      // Create nodes with positions
+      const nodeList = data.nodes.map((node, index) => {
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+
+        return {
+          id: node.id,
+          type: "custom",
           position: {
-            x: col * horizontalSpacing,
-            y: row * verticalSpacing,
+            x: col * 350 + 50,
+            y: row * 250 + 50,
           },
           data: {
-            number: index + 1,
-            title: step.title,
-            description: step.description,
-            completed: false,
+            ...node,
+            label: node.title,
           },
-        });
-
-        // Add edge to next node
-        if (index < steps.length - 1) {
-          newEdges.push({
-            id: `edge-${index}`,
-            source: `step-${index}`,
-            target: `step-${index + 1}`,
-            type: "smoothstep",
-            animated: true,
-            style: {
-              stroke: "#9333ea",
-              strokeWidth: 2,
-            },
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              color: "#9333ea",
-            },
-          });
-        }
+        };
       });
 
-      setNodes(newNodes);
-      setEdges(newEdges);
-    },
-    [setNodes, setEdges]
-  );
+      // Create edges connecting sequential nodes
+      const edgeList = [];
+      for (let i = 0; i < nodeList.length - 1; i++) {
+        edgeList.push({
+          id: `e${i}-${i + 1}`,
+          source: nodeList[i].id,
+          target: nodeList[i + 1].id,
+          type: "smoothstep",
+          animated: true,
+          style: { stroke: "#9333ea", strokeWidth: 2 },
+        });
+      }
 
-  // Generate flow chart when roadmap is loaded
-  useEffect(() => {
-    if (roadmap?.steps && roadmap.steps.length > 0 && !isStreaming) {
-      generateFlowChart(roadmap.steps);
+      return {
+        nodes: nodeList,
+        edges: edgeList,
+        roadmapData: data,
+        isOldFormat: false,
+      };
+    } catch (err) {
+      console.error("Failed to parse roadmap content:", err);
+      // Old format - plain text
+      return { nodes: [], edges: [], roadmapData: null, isOldFormat: true };
     }
-  }, [roadmap, isStreaming, generateFlowChart]);
+  }, [roadmap?.content]);
 
-  // Typing effect for streaming content
-  useEffect(() => {
-    if (isStreaming && streamingContent) {
-      const timer = setTimeout(() => {
-        if (typingIndex < streamingContent.length) {
-          setDisplayedContent(streamingContent.slice(0, typingIndex + 1));
-          setTypingIndex(typingIndex + 1);
-        }
-      }, 10);
+  const [nodesState, setNodes] = useNodesState(nodes);
+  const [edgesState, setEdges] = useEdgesState(edges);
 
-      return () => clearTimeout(timer);
-    } else if (roadmap && !isStreaming) {
-      setDisplayedContent(roadmap.content);
-    }
-  }, [streamingContent, typingIndex, isStreaming, roadmap]);
+  // Update nodes when roadmap changes
+  useMemo(() => {
+    setNodes(nodes);
+    setEdges(edges);
+  }, [nodes, edges, setNodes, setEdges]);
 
-  // Reset typing when content changes
-  useEffect(() => {
-    setTypingIndex(0);
-    setDisplayedContent("");
-  }, [id]);
+  const onNodeClick = useCallback((event, node) => {
+    setSelectedNode(node.data);
+  }, []);
 
   // Get back navigation path
   const getBackPath = () => {
-    // If came from dashboard, go back there
     if (location.state?.from === "dashboard") {
       return "/dashboard";
     }
-    // Otherwise go to roadmaps list
     return "/dashboard/roadmaps";
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
+          <h2 className="text-2xl font-bold text-gray-800">
+            Loading your roadmap...
+          </h2>
+          <p className="text-gray-600">
+            Please wait while we fetch your career path
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   // Error state
-  if (hasError) {
+  if (isError) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-pink-50 flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-red-100">
@@ -231,7 +277,7 @@ export default function RoadmapPage() {
   }
 
   // Not found state
-  if (!roadmap && !isStreaming) {
+  if (!roadmap) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-purple-100 text-center space-y-4">
@@ -256,12 +302,62 @@ export default function RoadmapPage() {
     );
   }
 
-  // Main immersive layout
+  // Old format roadmap - show message to regenerate
+  if (isOldFormat || nodes.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
+        <div className="max-w-xl w-full bg-white rounded-3xl p-8 shadow-xl border border-purple-100 text-center space-y-4">
+          <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center mx-auto">
+            <RefreshCw className="w-10 h-10 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">Upgrade Required</h2>
+          <p className="text-gray-600 leading-relaxed">
+            This roadmap was created with an older format. To experience the new{" "}
+            <strong>interactive node-based graph</strong> with clickable
+            learning resources, please generate a new roadmap!
+          </p>
+
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-purple-200">
+            <p className="text-sm font-semibold text-purple-900 mb-2">
+              ✨ New Features:
+            </p>
+            <ul className="text-sm text-gray-700 space-y-1 text-left list-disc list-inside">
+              <li>Interactive visual graph with connected nodes</li>
+              <li>Color-coded by learning category</li>
+              <li>Click nodes to see details</li>
+              <li>Direct links to learning resources</li>
+              <li>Zoom, pan, and explore</li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button
+              onClick={() => navigate("/dashboard")}
+              className="flex-1 bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 hover:from-pink-600 hover:via-purple-600 hover:to-violet-700"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Generate New Roadmap
+            </Button>
+            <Button
+              onClick={() => navigate("/dashboard/roadmaps")}
+              variant="outline"
+              className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              View All Roadmaps
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Main layout - Interactive graph view
   return (
-    <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
-      {/* Top Bar - Fixed */}
-      <div className="absolute top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm">
-        <div className="flex items-center justify-between px-6 py-4">
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex flex-col">
+      {/* Top Bar */}
+      <div className="bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4">
           <Button
             variant="outline"
             onClick={() => navigate(getBackPath())}
@@ -271,158 +367,120 @@ export default function RoadmapPage() {
             Back
           </Button>
           <div className="flex items-center gap-3">
-            {isStreaming ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin text-purple-600" />
-                <span className="text-sm font-medium text-purple-700">
-                  Generating your roadmap...
-                </span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-5 h-5 text-purple-600" />
-                <span className="text-sm font-medium text-gray-700">
-                  {roadmap?.career || "Career Roadmap"}
-                </span>
-              </>
-            )}
+            <Sparkles className="w-5 h-5 text-purple-600" />
+            <span className="text-sm sm:text-base font-medium text-gray-700 truncate max-w-[200px] sm:max-w-none">
+              {roadmapData?.title || roadmap.career || "Career Roadmap"}
+            </span>
           </div>
-          <div className="w-[100px]" /> {/* Spacer for balance */}
+          <div className="w-[80px] sm:w-[100px]" />
         </div>
       </div>
 
-      {/* Main Content - Split View */}
-      <div className="flex flex-col lg:flex-row h-full pt-[73px]">
-        {/* Left Panel - Roadmap Steps */}
-        <div className="w-full lg:w-1/2 h-full overflow-y-auto lg:border-r border-purple-200 bg-white/50 backdrop-blur-sm">
-          <div className="p-4 sm:p-8 space-y-4 sm:space-y-6">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 rounded-xl lg:rounded-2xl p-6 lg:p-8 shadow-xl">
-              <div className="flex items-center gap-3 lg:gap-4 mb-3">
-                <div className="w-12 h-12 lg:w-14 lg:h-14 bg-white/20 backdrop-blur-lg rounded-xl flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
-                </div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-white line-clamp-2">
-                  {roadmap?.career || "Your Career Roadmap"}
-                </h1>
-              </div>
-              <p className="text-purple-100 text-xs lg:text-sm">
-                A comprehensive guide to achieving your career goals
-              </p>
-            </div>
-
-            {/* Steps */}
-            {roadmap?.steps && roadmap.steps.length > 0 ? (
-              <div className="space-y-3 lg:space-y-4">
-                {roadmap.steps.map((step, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-xl p-4 lg:p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-purple-100 group"
-                  >
-                    <div className="flex items-start gap-3 lg:gap-4">
-                      <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                        <span className="text-white font-bold text-sm lg:text-base">
-                          {index + 1}
-                        </span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-base lg:text-lg font-bold text-gray-800 mb-1 lg:mb-2 flex items-center gap-2 line-clamp-2">
-                          {step.title}
-                          {!isStreaming && (
-                            <Circle className="w-3 h-3 lg:w-4 lg:h-4 text-purple-400 flex-shrink-0" />
-                          )}
-                        </h3>
-                        <p className="text-gray-600 text-xs lg:text-sm leading-relaxed whitespace-pre-wrap">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : isStreaming ? (
-              /* Streaming Content */
-              <div className="bg-white rounded-xl p-4 lg:p-6 shadow-md border border-purple-100">
-                <div className="relative">
-                  <pre className="whitespace-pre-wrap text-gray-700 font-sans text-xs lg:text-sm leading-relaxed">
-                    {displayedContent}
-                    <span className="inline-block w-2 h-4 bg-purple-500 animate-pulse ml-1" />
-                  </pre>
-                </div>
-              </div>
-            ) : (
-              /* Loading State */
-              <div className="bg-white rounded-xl p-8 lg:p-12 shadow-md border border-purple-100">
-                <div className="flex flex-col items-center justify-center gap-4 lg:gap-6">
-                  <div className="relative">
-                    <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
-                      <Zap className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full animate-ping opacity-20" />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-base lg:text-lg font-semibold text-gray-800 mb-2">
-                      Crafting your personalized roadmap...
-                    </h3>
-                    <p className="text-gray-600 text-xs lg:text-sm">
-                      Our AI is analyzing the best path for your career
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+      {/* Description Banner */}
+      {roadmapData?.description && (
+        <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 px-4 sm:px-6 py-4 sm:py-6 shadow-lg">
+          <div className="max-w-7xl mx-auto">
+            <p className="text-white text-sm sm:text-base leading-relaxed text-center">
+              {roadmapData.description}
+            </p>
           </div>
         </div>
+      )}
 
-        {/* Right Panel - React Flow Visualization */}
-        <div className="w-full lg:w-1/2 h-[50vh] lg:h-full bg-gradient-to-br from-purple-50 to-pink-50 relative">
-          {nodes.length > 0 ? (
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              nodeTypes={nodeTypes}
-              fitView
-              fitViewOptions={{ padding: 0.2 }}
-              minZoom={0.3}
-              maxZoom={1.5}
-              defaultEdgeOptions={{
-                type: "smoothstep",
-                animated: true,
-              }}
-              className="bg-transparent"
-            >
-              <Background color="#e9d5ff" gap={16} size={1} variant="dots" />
-              <Controls
-                className="bg-white/80 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg"
-                showInteractive={false}
-              />
-              <MiniMap
-                nodeColor={() => "#a855f7"}
-                maskColor="rgba(255, 255, 255, 0.8)"
-                className="bg-white/80 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg !hidden sm:!block"
-              />
-            </ReactFlow>
-          ) : (
-            <div className="h-full flex items-center justify-center p-6 lg:p-12">
-              <div className="text-center space-y-3 lg:space-y-4">
-                <div className="relative inline-block">
-                  <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
-                    <Target className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full animate-ping opacity-20" />
-                </div>
-                <h3 className="text-lg lg:text-xl font-semibold text-gray-800">
-                  Building your roadmap visualization...
+      {/* React Flow Container */}
+      <div
+        className="flex-1 relative"
+        style={{ width: "100%", height: "100%" }}
+      >
+        <ReactFlow
+          nodes={nodesState}
+          edges={edgesState}
+          onNodesChange={() => {}}
+          onEdgesChange={() => {}}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          fitView
+          fitViewOptions={{ padding: 0.2, maxZoom: 1 }}
+          className="bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50"
+          minZoom={0.1}
+          maxZoom={1.5}
+        >
+          <Background color="#e9d5ff" gap={16} size={1} variant="dots" />
+          <Controls className="bg-white/90 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg" />
+          <MiniMap
+            nodeColor={(node) => {
+              const category = node.data.category;
+              const colors = {
+                fundamentals: "#3b82f6",
+                intermediate: "#a855f7",
+                advanced: "#f97316",
+                specialization: "#10b981",
+              };
+              return colors[category] || "#6b7280";
+            }}
+            className="bg-white/90 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg"
+            maskColor="rgb(240, 240, 255, 0.6)"
+          />
+        </ReactFlow>
+
+        {/* Selected Node Detail Panel */}
+        {selectedNode && (
+          <div className="absolute bottom-6 right-6 bg-white rounded-2xl shadow-2xl border-2 border-purple-200 p-6 max-w-md w-full sm:w-96 z-10 animate-in slide-in-from-bottom-4">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex-1">
+                <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">
+                  {selectedNode.category}
+                </span>
+                <h3 className="text-xl font-bold text-gray-800 mt-1">
+                  {selectedNode.title}
                 </h3>
-                <p className="text-gray-600 text-xs lg:text-sm max-w-md mx-auto">
-                  Your personalized career path will appear here as an
-                  interactive flowchart
-                </p>
               </div>
+              <button
+                onClick={() => setSelectedNode(null)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                ✕
+              </button>
             </div>
-          )}
+
+            <p className="text-sm text-gray-600 leading-relaxed mb-4">
+              {selectedNode.description}
+            </p>
+
+            {selectedNode.duration && (
+              <div className="flex items-center gap-2 text-sm text-purple-600 mb-4">
+                <Clock className="w-4 h-4" />
+                <span className="font-medium">{selectedNode.duration}</span>
+              </div>
+            )}
+
+            {selectedNode.learnMoreUrl && (
+              <a
+                href={selectedNode.learnMoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-xl"
+              >
+                <span>Learn More</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        )}
+
+        {/* Floating Help Card */}
+        <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-lg rounded-xl shadow-lg border border-purple-200 p-4 max-w-xs hidden lg:block">
+          <div className="flex items-center gap-2 mb-2">
+            <Maximize2 className="w-4 h-4 text-purple-600" />
+            <span className="text-sm font-semibold text-gray-800">
+              Interactive Roadmap
+            </span>
+          </div>
+          <ul className="text-xs text-gray-600 space-y-1">
+            <li>• Click on any node to see details</li>
+            <li>• Zoom and pan to explore</li>
+            <li>• Click "Learn More" to visit resources</li>
+          </ul>
         </div>
       </div>
     </div>

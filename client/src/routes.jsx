@@ -7,6 +7,7 @@ import SignUpPage from "./pages/SignUpPage";
 import Dashboard from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import RoadmapsPage from "./pages/RoadmapsPage";
+import RoadmapPage from "./pages/RoadmapPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, Component: Dashboard },
           { path: "roadmaps", Component: RoadmapsPage },
+          { path: "roadmaps/:id", Component: RoadmapPage },
           { path: "profile", Component: ProfilePage },
         ],
       },

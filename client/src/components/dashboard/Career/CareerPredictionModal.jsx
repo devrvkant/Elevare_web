@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { v4 as uuidv4 } from "uuid";
 import {
   Dialog,
   DialogContent,
@@ -22,24 +21,20 @@ import {
   setStatus,
   setError,
 } from "@/features/career/careerSlice";
-import {
-  startStreaming,
-  appendStreamingContent,
-  completeStreaming,
-  failStreaming,
-} from "@/redux/slices/roadmapSlice";
-import { streamRoadmap, roadmapApi } from "@/redux/api/roadmapApi";
+import { useGenerateRoadmapMutation } from "@/redux/api/roadmapApi";
 import { X, Sparkles, TrendingUp, Loader2 } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
+import { toast } from "@/lib/toast";
 
 export default function CareerPredictionModal({ open, onOpenChange }) {
-  const {user} = useUser();
+  const { user } = useUser();
   const userId = user ? user.id : null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { lastPrediction, formData } = useSelector((state) => state.career);
   const [predictCareer, { isLoading }] = usePredictCareerMutation();
-  const [isGeneratingRoadmap, setIsGeneratingRoadmap] = useState(false);
+  const [generateRoadmap, { isLoading: isGeneratingRoadmap }] =
+    useGenerateRoadmapMutation();
 
   const [localForm, setLocalForm] = useState({
     course: "",
@@ -128,59 +123,30 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
   };
 
   const handleGenerateRoadmap = async () => {
-    if (!lastPrediction) return;
+    if (!lastPrediction || !userId) return;
 
-    setIsGeneratingRoadmap(true);
-
-    // Generate a unique UUID for this roadmap
-    const roadmapId = uuidv4();
-
-    // Start streaming
-    dispatch(startStreaming({ id: roadmapId, career: lastPrediction }));
-
-    // Navigate to the roadmap page immediately
-    navigate(`/dashboard/roadmaps/${roadmapId}`);
-
-    // Close the modal
-    onOpenChange(false);
-
-    // Start SSE streaming
     try {
-      streamRoadmap(
-        lastPrediction,
-        roadmapId,
+      // Call mutation and wait for complete generation
+      const result = await generateRoadmap({
+        career: lastPrediction,
         userId,
-        (chunk) => {
-          // On each chunk
-          dispatch(appendStreamingContent({ chunk }));
-        },
-        (finalContent) => {
-          // On complete
-          dispatch(completeStreaming({ content: finalContent }));
-          setIsGeneratingRoadmap(false);
-          
-          // Invalidate the roadmaps cache to refetch the list
-          dispatch(roadmapApi.util.invalidateTags(["Roadmaps"]));
-        },
-        (error) => {
-          // On error
-          console.error("Roadmap streaming error:", error);
-          const errorMessage = error.message || "Failed to generate roadmap. Please try again.";
-          
-          dispatch(failStreaming({
-            message: errorMessage,
-            id: roadmapId
-          }));
-          setIsGeneratingRoadmap(false);
-        }
-      );
+      }).unwrap();
+
+      // Only navigate if generation was successful and we have an _id
+      if (result.success && result.data?._id) {
+        // Close the modal
+        onOpenChange(false);
+
+        // Navigate to the roadmap page with the MongoDB _id
+        navigate(`/dashboard/roadmaps/${result.data._id}`);
+      } else {
+        toast.error("Failed to generate roadmap. Please try again.");
+      }
     } catch (error) {
-      console.error("Failed to start roadmap generation:", error);
-      dispatch(failStreaming({
-        message: error.message || "Failed to start generation",
-        id: roadmapId
-      }));
-      setIsGeneratingRoadmap(false);
+      console.error("Failed to generate roadmap:", error);
+      toast.error(
+        error.data?.message || "Failed to generate roadmap. Please try again."
+      );
     }
   };
 

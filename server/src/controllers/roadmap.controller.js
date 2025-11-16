@@ -8,142 +8,127 @@ const ai = new GoogleGenAI({
 });
 
 export const generateRoadmap = async (req, res) => {
-  let hasError = false;
-  let errorMessage = "";
-
   try {
-    const { career, id, userId } = req.query;
+    const { career, userId } = req.query;
 
-    if (!career || !id || !userId) {
+    if (!career || !userId) {
       return res.status(400).json({
         success: false,
-        message: "career, id, and userId are required",
+        message: "career and userId are required",
       });
     }
-
-    // Set headers for SSE
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-    res.setHeader("X-Accel-Buffering", "no");
-    res.flushHeaders?.();
 
     const prompt = `
-      Create a clear, step-by-step roadmap for becoming a successful ${career}.
-      Include:
-      1. Key skills and technologies to learn (in order)
-      2. Recommended courses or certifications
-      3. Real-world projects to practice
-      4. How to build a strong portfolio
-      5. Job preparation tips
+      Create a detailed, interactive roadmap for becoming a successful ${career}.
 
-      Format response as JSON:
+      Return ONLY a valid JSON object (no markdown, no explanation) with this exact structure:
       {
-        "career": "${career}",
-        "steps": [
-          {"title": "Step 1: Foundation", "description": "..."},
-          {"title": "Step 2: Core Skills", "description": "..."},
-          ...
+        "title": "Career title",
+        "description": "Brief overview (2-3 sentences)",
+        "nodes": [
+          {
+            "id": "unique_id",
+            "title": "Node title",
+            "description": "What you'll learn (2-3 sentences)",
+            "category": "fundamentals|intermediate|advanced|specialization",
+            "learnMoreUrl": "https://actual-learning-resource-url.com",
+            "duration": "X weeks/months"
+          }
         ]
       }
+
+      Guidelines:
+      - Create 8-12 nodes organized in a learning progression
+      - Use real, working URLs for learnMoreUrl (official docs, MDN, W3Schools, freeCodeCamp, etc.)
+      - Categories: fundamentals (basics), intermediate (building skills), advanced (expert level), specialization (career-specific)
+      - Make descriptions clear and actionable
+      - Include realistic durations
     `;
 
-    let accumulatedContent = "";
-    let streamStarted = false;
+    // Generate complete content from Gemini
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
-    try {
-      const response = await ai.models.generateContentStream({
-        model: "gemini-2.5-flash",
-        contents: prompt,
+    let generatedContent = response.text;
+
+    if (!generatedContent || generatedContent.length === 0) {
+      return res.status(500).json({
+        success: false,
+        message: "No content generated from AI",
       });
-
-      for await (const chunk of response) {
-        if (chunk.text) {
-          streamStarted = true;
-          const text = chunk.text;
-          accumulatedContent += text;
-          res.write(`data: ${text}\n\n`);
-        }
-      }
-
-      if (streamStarted && accumulatedContent.length > 0) {
-        res.write("event: done\ndata: [DONE]\n\n");
-      } else {
-        throw new Error("No content generated from AI");
-      }
-    } catch (aiError) {
-      hasError = true;
-      errorMessage = aiError.message || "AI generation failed";
-
-      if (
-        aiError.message?.includes("429") ||
-        aiError.message?.includes("quota")
-      ) {
-        errorMessage = "API quota exceeded. Please try again later.";
-      } else if (
-        aiError.message?.includes("503") ||
-        aiError.message?.includes("overload")
-      ) {
-        errorMessage =
-          "Service temporarily overloaded. Please try again in a moment.";
-      }
-
-      console.error("AI generation error:", aiError);
-      res.write(
-        `event: error\ndata: ${JSON.stringify({ error: errorMessage })}\n\n`
-      );
-      res.end();
-      return;
     }
 
-    res.end();
+    // Clean up the response - remove markdown code blocks if present
+    generatedContent = generatedContent
+      .replace(/```json\s*/g, "")
+      .replace(/```\s*/g, "")
+      .trim();
 
-    // Save to database if generation was successful
-    if (!hasError && accumulatedContent.length > 0) {
-      try {
-        let steps = [];
-        try {
-          const jsonMatch =
-            accumulatedContent.match(/```json\s*([\s\S]*?)\s*```/) ||
-            accumulatedContent.match(/\{[\s\S]*"steps"[\s\S]*\}/);
+    // Parse the JSON response
+    let roadmapData;
+    try {
+      roadmapData = JSON.parse(generatedContent);
 
-          if (jsonMatch) {
-            const jsonStr = jsonMatch[1] || jsonMatch[0];
-            const parsed = JSON.parse(jsonStr);
-            steps = parsed.steps || [];
-          }
-        } catch (parseError) {
-          console.log("Could not parse JSON, saving raw content");
-        }
-
-        await Roadmap.create({
-          id,
-          userId,
-          career,
-          content: accumulatedContent,
-          steps,
-          status: "completed",
-        });
-
-        console.log(`✅ Roadmap ${id} saved to database successfully`);
-      } catch (dbError) {
-        console.error("❌ Failed to save roadmap to database:", dbError.message);
+      // Validate structure
+      if (!roadmapData.nodes || !Array.isArray(roadmapData.nodes)) {
+        throw new Error("Invalid roadmap structure");
       }
+    } catch (parseErr) {
+      console.error("JSON parsing failed:", parseErr);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to parse AI response",
+      });
     }
+
+    // Save to database only if generation was successful
+    const roadmap = await Roadmap.create({
+      userId,
+      career,
+      content: JSON.stringify(roadmapData),
+      steps: roadmapData.nodes || [], // Store nodes as steps for compatibility
+      status: "completed",
+    });
+
+    console.log(`✅ Roadmap ${roadmap._id} created successfully`);
+
+    // Return the complete roadmap with MongoDB _id
+    return res.status(201).json({
+      success: true,
+      data: {
+        _id: roadmap._id,
+        userId: roadmap.userId,
+        career: roadmap.career,
+        content: roadmap.content,
+        steps: roadmap.steps,
+        status: roadmap.status,
+        createdAt: roadmap.createdAt,
+        updatedAt: roadmap.updatedAt,
+      },
+    });
   } catch (error) {
     console.error("Roadmap generation error:", error.message);
 
-    if (!res.headersSent) {
-      res.status(500).json({
-        success: false,
-        message: error.message || "Failed to generate roadmap",
-      });
-    } else {
-      res.write(
-        `event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`
-      );
-      res.end();
+    // Better error messages
+    let errorMessage = "Failed to generate roadmap";
+    if (error.message?.includes("429") || error.message?.includes("quota")) {
+      errorMessage = "API quota exceeded. Please try again later.";
+    } else if (
+      error.message?.includes("503") ||
+      error.message?.includes("overload")
+    ) {
+      errorMessage =
+        "Service temporarily overloaded. Please try again in a moment.";
+    } else if (error.message) {
+      errorMessage = error.message;
     }
+
+    return res.status(500).json({
+      success: false,
+      message: errorMessage,
+    });
   }
 };
 
@@ -181,7 +166,7 @@ export const getRoadmapById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const roadmap = await Roadmap.findOne({ id }).select("-__v");
+    const roadmap = await Roadmap.findById(id).select("-__v");
 
     if (!roadmap) {
       return res.status(404).json({
@@ -208,7 +193,7 @@ export const deleteRoadmap = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const roadmap = await Roadmap.findOneAndDelete({ id });
+    const roadmap = await Roadmap.findByIdAndDelete(id);
 
     if (!roadmap) {
       return res.status(404).json({
