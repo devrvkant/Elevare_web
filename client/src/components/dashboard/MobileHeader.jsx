@@ -1,4 +1,5 @@
 import { UserButton } from "@clerk/clerk-react";
+import { Sparkles } from "lucide-react";
 
 const MobileHeader = ({ onMenuClick }) => {
   return (
@@ -23,11 +24,11 @@ const MobileHeader = ({ onMenuClick }) => {
         </button>
 
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
-            🤖
+          <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center text-white">
+            <Sparkles className="w-5 h-5" strokeWidth={2.5} />
           </div>
-          <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-violet-600 bg-clip-text text-transparent">
-            AI CAREER
+          <h1 className="text-lg font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+            ELEVARE
           </h1>
         </div>
 

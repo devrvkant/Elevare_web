@@ -9,32 +9,35 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
         <MobileHeader onMenuClick={() => setSidebarOpen(true)} />
 
         {/* Desktop Header */}
-        <header className="hidden lg:block sticky top-0 z-20 bg-white border-b border-gray-200">
+        <header className="hidden lg:block bg-white border-b border-gray-200 flex-shrink-0">
           <div className="px-8 py-4 flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
-                Welcome back, {user?.firstName || "User"}! 👋
+                Welcome {user?.firstName || "User"}!
               </h2>
               <p className="text-sm text-gray-500 mt-1">
                 Let's build something amazing today
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative">
-                <span className="text-2xl">🔔</span>
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-              <UserButton afterSignOutUrl="/" />
+            <div className="flex items-center">
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "w-15 h-15",
+                  },
+                }}
+              />
             </div>
           </div>
         </header>
