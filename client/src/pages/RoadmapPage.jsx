@@ -12,7 +12,7 @@ import {
   Maximize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGetRoadmapQuery } from "@/redux/api/roadmapApi";
+import { useGetRoadmapQuery } from "@/features/rodemap/roadmapApi";
 import {
   ReactFlow,
   Background,
@@ -51,7 +51,9 @@ const CustomNode = ({ data }) => {
           <div className="flex items-center gap-3 mb-2">
             {/* Step Number Circle */}
             <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/40">
-              <span className="text-white font-bold text-sm">{data.stepNumber}</span>
+              <span className="text-white font-bold text-sm">
+                {data.stepNumber}
+              </span>
             </div>
             <span className="text-xs font-semibold text-white/90 uppercase tracking-wide">
               {data.category}
@@ -140,7 +142,7 @@ export default function RoadmapPage() {
       // Create nodes with positions - zigzag layout (alternating left/right)
       const nodeList = data.nodes.map((node, index) => {
         const isLeft = index % 2 === 0; // Even indices on left, odd on right
-        
+
         return {
           id: node.id,
           type: "custom",

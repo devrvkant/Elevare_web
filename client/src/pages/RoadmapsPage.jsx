@@ -8,7 +8,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGetUserRoadmapsQuery } from "../redux/api/roadmapApi";
+import { useGetUserRoadmapsQuery } from "../features/rodemap/roadmapApi";
 import { useUser } from "@clerk/clerk-react";
 
 export default function RoadmapsPage() {

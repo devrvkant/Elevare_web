@@ -21,7 +21,7 @@ import {
   setStatus,
   setError,
 } from "@/features/career/careerSlice";
-import { useGenerateRoadmapMutation } from "@/redux/api/roadmapApi";
+import { useGenerateRoadmapMutation } from "@/features/rodemap/roadmapApi";
 import { X, Sparkles, TrendingUp, Loader2 } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "@/lib/toast";

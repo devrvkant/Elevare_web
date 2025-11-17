@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import careerReducer from "../features/career/careerSlice";
 import { careerApi } from "../features/career/careerApi";
-import roadmapReducer from "./slices/roadmapSlice";
-import { roadmapApi } from "./api/roadmapApi";
+import roadmapReducer from "../features/rodemap/roadmapSlice";
+import { roadmapApi } from "../features/rodemap/roadmapApi";
 
 export const store = configureStore({
   reducer: {
