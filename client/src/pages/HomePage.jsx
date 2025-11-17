@@ -1,5 +1,15 @@
 import { useNavigate } from "react-router";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import {
+  Brain,
+  Target,
+  BarChart3,
+  Briefcase,
+  Rocket,
+  TrendingUp,
+  Sparkles,
+  Linkedin,
+} from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -9,29 +19,29 @@ export default function Home() {
       title: "AI-Powered Career Analysis",
       description:
         "Advanced machine learning algorithms analyze your skills, interests, and market trends to suggest the perfect career path.",
-      icon: "🧠",
-      color: "from-purple-400 to-pink-400",
+      icon: Brain,
+      color: "from-violet-400 to-purple-400",
     },
     {
       title: "Personalized Learning Roadmap",
       description:
         "Get a custom learning path with resources, courses, and milestones tailored to your career goals.",
-      icon: "🎯",
+      icon: Target,
       color: "from-blue-400 to-indigo-400",
     },
     {
       title: "Skills Gap Analysis",
       description:
         "Identify exactly what skills you need to develop to reach your dream job and track your progress.",
-      icon: "📊",
-      color: "from-green-400 to-teal-400",
+      icon: BarChart3,
+      color: "from-emerald-400 to-teal-400",
     },
     {
       title: "Industry Insights",
       description:
         "Stay updated with the latest industry trends, salary ranges, and job market demands.",
-      icon: "💼",
-      color: "from-yellow-400 to-orange-400",
+      icon: Briefcase,
+      color: "from-amber-400 to-orange-400",
     },
   ];
 
@@ -120,9 +130,9 @@ export default function Home() {
             <SignedOut>
               <button
                 onClick={() => navigate("/sign-up")}
-                className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl"
+                className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2"
               >
-                Start Your Journey 🚀
+                Start Your Journey <Rocket className="w-5 h-5" />
               </button>
               <button
                 onClick={() => navigate("/sign-in")}
@@ -135,9 +145,9 @@ export default function Home() {
             <SignedIn>
               <button
                 onClick={() => navigate("/dashboard")}
-                className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full hover:from-green-700 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-2xl"
+                className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2"
               >
-                Continue to Dashboard 📊
+                Continue to Dashboard <TrendingUp className="w-5 h-5" />
               </button>
             </SignedIn>
           </div>
@@ -158,25 +168,30 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent hover:-translate-y-2"
-              >
+            {features.map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
-                ></div>
-                <div className="relative">
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-3">
-                    {feature.title}
-                  </h4>
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
+                  key={index}
+                  className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent hover:-translate-y-2"
+                >
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
+                  ></div>
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="w-7 h-7 text-indigo-600" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">
+                      {feature.title}
+                    </h4>
+                    <p className="text-gray-600 leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -241,12 +256,22 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h3 className="text-4xl font-bold text-white mb-6">
+      <section className="relative py-24 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
+          <div className="absolute top-10 left-10 w-72 h-72 bg-violet-500/30 rounded-full filter blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/30 rounded-full filter blur-3xl animate-pulse animation-delay-2000"></div>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-purple-500/50 mb-6">
+            <Sparkles className="w-8 h-8 text-white" />
+          </div>
+          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Transform Your Career?
           </h3>
-          <p className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
             Join thousands of professionals who have discovered their dream
             careers with Elevare's AI-powered guidance.
           </p>
@@ -254,36 +279,115 @@ export default function Home() {
           <SignedOut>
             <button
               onClick={() => navigate("/sign-up")}
-              className="px-10 py-4 text-lg font-semibold bg-white text-indigo-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl"
+              className="px-10 py-4 text-lg font-semibold bg-white text-purple-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto"
             >
-              Get Started for Free ✨
+              Get Started for Free <Sparkles className="w-5 h-5" />
             </button>
           </SignedOut>
 
           <SignedIn>
             <button
               onClick={() => navigate("/dashboard")}
-              className="px-10 py-4 text-lg font-semibold bg-white text-indigo-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl"
+              className="px-10 py-4 text-lg font-semibold bg-white text-purple-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto"
             >
-              Continue Your Journey ✨
+              Continue Your Journey <Sparkles className="w-5 h-5" />
             </button>
           </SignedIn>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h4 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-4">
-              Elevare
-            </h4>
-            <p className="text-gray-400 mb-6">
-              Elevating careers through AI-powered insights
-            </p>
-            <p className="text-gray-500">
-              © {new Date().getFullYear()} Elevare. All rights reserved.
-            </p>
+      <footer className="bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="text-center md:text-left">
+              <h4 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                Elevare
+              </h4>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Elevating careers through AI-powered insights and personalized
+                guidance.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div className="text-center">
+              <h5 className="font-semibold text-gray-900 mb-4">Quick Links</h5>
+              <div className="space-y-2">
+                <a
+                  href="#features"
+                  className="block text-gray-600 hover:text-indigo-600 transition-colors text-sm"
+                >
+                  Features
+                </a>
+                <a
+                  href="#about"
+                  className="block text-gray-600 hover:text-indigo-600 transition-colors text-sm"
+                >
+                  How It Works
+                </a>
+                <SignedOut>
+                  <button
+                    onClick={() => navigate("/sign-up")}
+                    className="block w-full text-gray-600 hover:text-indigo-600 transition-colors text-sm"
+                  >
+                    Get Started
+                  </button>
+                </SignedOut>
+              </div>
+            </div>
+
+            {/* Contact/Social */}
+            <div className="text-center md:text-right">
+              <h5 className="font-semibold text-gray-900 mb-4">Connect</h5>
+              <p className="text-gray-600 text-sm mb-3">
+                Connect with the creators on LinkedIn
+              </p>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="https://www.linkedin.com/in/ravikant-jangir"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center md:justify-end gap-2 text-gray-600 hover:text-indigo-600 transition-colors text-sm group"
+                >
+                  <Linkedin className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">Ravikant Jangir</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/divyam-manchanda"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center md:justify-end gap-2 text-gray-600 hover:text-purple-600 transition-colors text-sm group"
+                >
+                  <Linkedin className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">Divyam Manchanda</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-200 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              {/* Copyright */}
+              <p className="text-gray-500 text-sm text-center md:text-left">
+                © {new Date().getFullYear()} Elevare. All rights reserved.
+              </p>
+
+              {/* Made with love */}
+              <p className="text-gray-600 text-sm text-center flex items-center gap-2">
+                Made with{" "}
+                <span className="text-red-500 animate-pulse">❤️</span> by
+                <span className="font-semibold text-indigo-600">
+                  Ravikant Jangir
+                </span>{" "}
+                &{" "}
+                <span className="font-semibold text-purple-600">
+                  Divyam Manchanda
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </footer>
