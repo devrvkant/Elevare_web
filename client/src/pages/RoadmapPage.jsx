@@ -34,15 +34,7 @@ const CustomNode = ({ data }) => {
     specialization: "from-green-500 to-emerald-500",
   };
 
-  const categoryIcons = {
-    fundamentals: "🎯",
-    intermediate: "🚀",
-    advanced: "⚡",
-    specialization: "💎",
-  };
-
   const gradient = categoryColors[data.category] || "from-gray-500 to-gray-600";
-  const icon = categoryIcons[data.category] || "📚";
 
   return (
     <div className="group">
@@ -56,8 +48,11 @@ const CustomNode = ({ data }) => {
       <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 w-[280px]">
         {/* Header with gradient */}
         <div className={`bg-gradient-to-r ${gradient} p-4 rounded-t-xl`}>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{icon}</span>
+          <div className="flex items-center gap-3 mb-2">
+            {/* Step Number Circle */}
+            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/40">
+              <span className="text-white font-bold text-sm">{data.stepNumber}</span>
+            </div>
             <span className="text-xs font-semibold text-white/90 uppercase tracking-wide">
               {data.category}
             </span>
@@ -142,33 +137,33 @@ export default function RoadmapPage() {
         return { nodes: [], edges: [], roadmapData: null, isOldFormat: true };
       }
 
-      // Create nodes with positions
+      // Create nodes with positions - zigzag layout (alternating left/right)
       const nodeList = data.nodes.map((node, index) => {
-        const row = Math.floor(index / 3);
-        const col = index % 3;
-
+        const isLeft = index % 2 === 0; // Even indices on left, odd on right
+        
         return {
           id: node.id,
           type: "custom",
           position: {
-            x: col * 350 + 50,
-            y: row * 250 + 50,
+            x: isLeft ? 100 : 600, // Left at 100px, Right at 600px (500px apart for more space)
+            y: Math.floor(index / 2) * 350 + 50, // Move down every 2 nodes (increased to 350px)
           },
           data: {
             ...node,
+            stepNumber: index + 1, // Add step number starting from 1
             label: node.title,
           },
         };
       });
 
-      // Create edges connecting sequential nodes
+      // Create edges connecting sequential nodes (each node connects only to next)
       const edgeList = [];
       for (let i = 0; i < nodeList.length - 1; i++) {
         edgeList.push({
           id: `e${i}-${i + 1}`,
           source: nodeList[i].id,
           target: nodeList[i + 1].id,
-          type: "smoothstep",
+          type: "smoothstep", // Smoothstep for curved connections in zigzag
           animated: true,
           style: { stroke: "#9333ea", strokeWidth: 2 },
         });
