@@ -351,10 +351,10 @@ export default function RoadmapPage() {
 
   // Main layout - Interactive graph view
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex flex-col">
+    <div className="h-full bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4">
+      <div className="bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm flex-shrink-0 z-50">
+        <div className="flex items-center justify-between px-6 py-3">
           <Button
             variant="outline"
             onClick={() => navigate(getBackPath())}
@@ -375,12 +375,10 @@ export default function RoadmapPage() {
 
       {/* Description Banner */}
       {roadmapData?.description && (
-        <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 px-4 sm:px-6 py-4 sm:py-6 shadow-lg">
-          <div className="max-w-7xl mx-auto">
-            <p className="text-white text-sm sm:text-base leading-relaxed text-center">
-              {roadmapData.description}
-            </p>
-          </div>
+        <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 px-6 py-3 shadow-lg flex-shrink-0">
+          <p className="text-white text-sm leading-relaxed text-center">
+            {roadmapData.description}
+          </p>
         </div>
       )}
 
@@ -398,7 +396,7 @@ export default function RoadmapPage() {
           nodeTypes={nodeTypes}
           fitView
           fitViewOptions={{ padding: 0.2, maxZoom: 1 }}
-          className="bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50"
+          className="bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 w-full h-full"
           minZoom={0.1}
           maxZoom={1.5}
         >

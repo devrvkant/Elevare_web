@@ -38,7 +38,7 @@ export const generateRoadmap = async (req, res) => {
       }
 
       Guidelines:
-      - Create 8-12 nodes organized in a learning progression
+      - Create 9-16 nodes organized in a learning progression
       - Use real, working URLs for learnMoreUrl (official docs, MDN, W3Schools, freeCodeCamp, etc.)
       - Categories: fundamentals (basics), intermediate (building skills), advanced (expert level), specialization (career-specific)
       - Make descriptions clear and actionable
