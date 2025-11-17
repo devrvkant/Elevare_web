@@ -22,8 +22,10 @@ jobs:
         with:
           submodules: true
           lfs: false
+      
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
+      
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -32,6 +34,16 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+      
+      # Step: Explicitly build the client application with environment variables
+      - name: Build App
+        run: npm install && npm run build
+        working-directory: ./client
+        env:
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
+          # Add any other VITE_ prefixed environment variables you need here
+      
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -40,9 +52,10 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "./client" # App source code path
+          app_location: "./client/dist" # Point to the built output directory
           api_location: "" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional
+          output_location: "" # No longer needed since app_location points to dist
+          skip_app_build: true # Skip build since we already built in the previous step
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
 
@@ -55,5 +68,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_FOREST_0AB9F7900 }}
           action: "close"
-
