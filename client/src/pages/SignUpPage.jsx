@@ -33,8 +33,7 @@ const SignUpPage = () => {
         <div className="w-full flex justify-center">
           <SignUp
             routing="path"
-            path="/sign-up/*"
-            afterSignUpUrl="/dashboard"
+            path="/sign-up"
             redirectUrl="/dashboard"
             signInUrl="/sign-in"
             appearance={{
