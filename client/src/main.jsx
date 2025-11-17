@@ -13,7 +13,13 @@ import { store } from "./redux/store";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <ClerkProvider publishableKey={config.publishableKey}>
+      <ClerkProvider
+        publishableKey={config.publishableKey}
+        frontendApi="clerk.jangir.me" // important
+        afterSignInUrl="/dashboard"
+        navigate={(to) => router.navigate(to)}
+        afterSignUpUrl="/dashboard"
+      >
         <RouterProvider router={router} />
       </ClerkProvider>
     </Provider>
