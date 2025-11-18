@@ -1,5 +1,3 @@
-import { careerApi } from "../features/career/careerApi";
-
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const FIREBASE_API_KEY = import.meta.env.VITE_FIREBASE_API_KEY;
 const FIREBASE_AUTH_DOMAIN = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN;
@@ -8,7 +6,6 @@ const FIREBASE_STORAGE_BUCKET = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET;
 const FIREBASE_MESSAGING_SENDER_ID = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
 const FIREBASE_APP_ID = import.meta.env.VITE_FIREBASE_APP_ID;
 const FIREBASE_MEASUREMENT_ID = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
-const CAREER_API_URL = import.meta.env.VITE_CAREER_API_URL;
 
 export const config = {
   apiUrl: API_URL,

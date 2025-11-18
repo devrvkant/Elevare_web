@@ -3,7 +3,9 @@ import { config } from "../../config/env.js";
 
 export const careerApi = createApi({
   reducerPath: "careerApi",
-  baseQuery: fetchBaseQuery({ baseUrl: config.careerApiUrl }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${config.apiUrl}/api/career`,
+  }),
   endpoints: (builder) => ({
     predictCareer: builder.mutation({
       query: (body) => ({
