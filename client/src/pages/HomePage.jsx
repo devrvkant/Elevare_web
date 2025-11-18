@@ -102,7 +102,7 @@ export default function Home() {
                   >
                     Dashboard
                   </button>
-                  <div 
+                  <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer ${avatarColor}`}
                     onClick={() => navigate("/dashboard/profile")}
                   >
@@ -358,7 +358,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col gap-2">
                 <a
-                  href="https://www.linkedin.com/in/ravikant-jangir"
+                  href="https://www.linkedin.com/in/ravikantjangir"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center md:justify-end gap-2 text-gray-600 hover:text-indigo-600 transition-colors text-sm group"
