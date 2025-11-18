@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import { getUserInitials, getUserColor } from "../lib/userUtils";
 import {
   Brain,
   Target,
@@ -14,6 +15,10 @@ import {
 export default function Home() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
+  // Get user initials and color for avatar
+  const userInitials = getUserInitials(currentUser);
+  const avatarColor = getUserColor(currentUser);
 
   const features = [
     {
@@ -97,12 +102,12 @@ export default function Home() {
                   >
                     Dashboard
                   </button>
-                  <img 
-                    src={currentUser?.photoURL || `https://ui-avatars.com/api/?name=${currentUser?.displayName || 'User'}&background=6366f1&color=fff`}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full cursor-pointer"
+                  <div 
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer ${avatarColor}`}
                     onClick={() => navigate("/dashboard/profile")}
-                  />
+                  >
+                    {userInitials}
+                  </div>
                 </>
               )}
             </div>

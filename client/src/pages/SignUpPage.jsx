@@ -8,7 +8,7 @@ import { Label } from "../components/ui/label";
 const SignUpPage = () => {
   const navigate = useNavigate();
   const { signup, signInWithGoogle, error: authError } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,7 +27,7 @@ const SignUpPage = () => {
 
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       setError("Please fill in all fields");
       return;
@@ -184,7 +184,7 @@ const SignUpPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 mt-4"
             >
               {loading ? "Creating account..." : "Create account"}
             </Button>

@@ -60,6 +60,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const provider = new GoogleAuthProvider();
+      // Request access to user's profile and email
+      provider.addScope('profile');
+      provider.addScope('email');
+      // Optional: Set custom parameters
+      provider.setCustomParameters({
+        prompt: 'select_account' // Always show account selection
+      });
       return await signInWithPopup(auth, provider);
     } catch (err) {
       setError(err.message);

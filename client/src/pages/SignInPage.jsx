@@ -149,21 +149,11 @@ const SignInPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3"
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 mt-4"
             >
               {loading ? "Signing in..." : "Continue"}
             </Button>
           </form>
-
-          {/* Footer Links */}
-          <div className="mt-6 text-center text-sm text-gray-600">
-            <Link
-              to="/forgot-password"
-              className="text-indigo-600 hover:text-indigo-700 font-semibold"
-            >
-              Forgot password?
-            </Link>
-          </div>
         </div>
 
         {/* Sign Up Link */}

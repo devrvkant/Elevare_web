@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { getUserInitials, getUserColor } from "../lib/userUtils";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -9,6 +10,10 @@ const ProfilePage = () => {
   const [displayName, setDisplayName] = useState(currentUser?.displayName || "");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // Get user initials and color for avatar
+  const userInitials = getUserInitials(currentUser);
+  const avatarColor = getUserColor(currentUser);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -32,11 +37,9 @@ const ProfilePage = () => {
         
         {/* Profile Picture */}
         <div className="flex items-center gap-6 mb-8">
-          <img
-            src={currentUser?.photoURL || `https://ui-avatars.com/api/?name=${currentUser?.displayName || currentUser?.email}&background=6366f1&color=fff&size=128`}
-            alt="Profile"
-            className="w-24 h-24 rounded-full"
-          />
+          <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-bold ${avatarColor}`}>
+            {userInitials}
+          </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">
               {currentUser?.displayName || "User"}
