@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Generator - Elevare</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #8B5CF6;
+            margin-bottom: 30px;
+        }
+        canvas {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        button {
+            background: linear-gradient(to right, #8B5CF6, #A855F7);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .preview-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .preview-item {
+            text-align: center;
+        }
+        .preview-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Elevare Favicon Generator</h1>
+        <p>Click the buttons below to generate and download favicon files in different sizes.</p>
+        
+        <div>
+            <button onclick="generateAndDownload(16)">Download 16x16 (favicon.ico)</button>
+            <button onclick="generateAndDownload(32)">Download 32x32</button>
+            <button onclick="generateAndDownload(180)">Download 180x180 (Apple Touch)</button>
+            <button onclick="generateAndDownload(192)">Download 192x192 (Android)</button>
+            <button onclick="generateAndDownload(512)">Download 512x512</button>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-item">
+                <canvas id="canvas16" width="16" height="16"></canvas>
+                <div class="preview-label">16x16</div>
+            </div>
+            <div class="preview-item">
+                <canvas id="canvas32" width="32" height="32"></canvas>
+                <div class="preview-label">32x32</div>
+            </div>
+            <div class="preview-item">
+                <canvas id="canvas180" width="180" height="180"></canvas>
+                <div class="preview-label">180x180</div>
+            </div>
+            <div class="preview-item">
+                <canvas id="canvas192" width="192" height="192"></canvas>
+                <div class="preview-label">192x192</div>
+            </div>
+            <div class="preview-item">
+                <canvas id="canvas512" width="512" height="512"></canvas>
+                <div class="preview-label">512x512</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function drawFavicon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#8B5CF6');
+            gradient.addColorStop(1, '#A855F7');
+            
+            // Draw rounded rectangle background
+            const radius = size * 0.2;
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+            
+            // Draw sparkle/star icon
+            ctx.strokeStyle = 'white';
+            ctx.lineCap = 'round';
+            
+            const center = size / 2;
+            const mainLength = size * 0.55;
+            const diagonalLength = size * 0.4;
+            const mainWidth = size * 0.063;
+            const diagonalWidth = size * 0.047;
+            
+            // Main vertical line
+            ctx.lineWidth = mainWidth;
+            ctx.beginPath();
+            ctx.moveTo(center, center - mainLength);
+            ctx.lineTo(center, center - size * 0.08);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(center, center + size * 0.08);
+            ctx.lineTo(center, center + mainLength);
+            ctx.stroke();
+            
+            // Main horizontal line
+            ctx.beginPath();
+            ctx.moveTo(center - mainLength, center);
+            ctx.lineTo(center - size * 0.08, center);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(center + size * 0.08, center);
+            ctx.lineTo(center + mainLength, center);
+            ctx.stroke();
+            
+            // Diagonal lines
+            ctx.lineWidth = diagonalWidth;
+            const diagOffset = size * 0.06;
+            
+            // Top-left to center
+            ctx.beginPath();
+            ctx.moveTo(center - diagonalLength, center - diagonalLength);
+            ctx.lineTo(center - diagOffset, center - diagOffset);
+            ctx.stroke();
+            
+            // Center to bottom-right
+            ctx.beginPath();
+            ctx.moveTo(center + diagOffset, center + diagOffset);
+            ctx.lineTo(center + diagonalLength, center + diagonalLength);
+            ctx.stroke();
+            
+            // Top-right to center
+            ctx.beginPath();
+            ctx.moveTo(center + diagonalLength, center - diagonalLength);
+            ctx.lineTo(center + diagOffset, center - diagOffset);
+            ctx.stroke();
+            
+            // Center to bottom-left
+            ctx.beginPath();
+            ctx.moveTo(center - diagOffset, center + diagOffset);
+            ctx.lineTo(center - diagonalLength, center + diagonalLength);
+            ctx.stroke();
+            
+            // Center circle
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.039, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function generateAndDownload(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            drawFavicon(canvas);
+            
+            const link = document.createElement('a');
+            let filename = `favicon-${size}x${size}.png`;
+            
+            if (size === 16) filename = 'favicon.ico';
+            else if (size === 180) filename = 'apple-touch-icon.png';
+            else if (size === 192) filename = 'android-chrome-192x192.png';
+            else if (size === 512) filename = 'android-chrome-512x512.png';
+            
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Draw previews on page load
+        window.onload = function() {
+            [16, 32, 180, 192, 512].forEach(size => {
+                const canvas = document.getElementById(`canvas${size}`);
+                drawFavicon(canvas);
+            });
+        };
+    </script>
+</body>
+</html>
