@@ -14,11 +14,11 @@ app.use(
   cors({
     origin:
       config.nodeEnv === "production"
-        ? ["https://elevare.jangir.me"]
-        : [
-            "http://localhost:5173",
+        ? [
             "https://elevare.jangir.me",
-          ],
+            "https://gentle-forest-0ab9f7900.3.azurestaticapps.net",
+          ]
+        : ["http://localhost:5173", "https://elevare.jangir.me"],
     credentials: true,
   })
 ); // prevent from CORS errors(allow cross origin access)
