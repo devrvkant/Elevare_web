@@ -1,17 +1,18 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { config } from "../../config/env";
 
 // Your web app's Firebase configuration
 // Using environment variables for security and flexibility
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: config.firebaseApiKey,
+  authDomain: config.firebaseAuthDomain,
+  projectId: config.firebaseProjectId,
+  storageBucket: config.firebaseStorageBucket,
+  messagingSenderId: config.firebaseMessagingSenderId,
+  appId: config.firebaseAppId,
+  measurementId: config.firebaseMeasurementId,
 };
 
 // Initialize Firebase
