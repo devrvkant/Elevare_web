@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 import {
   Brain,
   Target,
@@ -13,6 +13,7 @@ import {
 
 export default function Home() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const features = [
     {
@@ -73,29 +74,37 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <SignedOut>
-                <button
-                  onClick={() => navigate("/sign-in")}
-                  className="text-gray-600 hover:text-indigo-600 font-medium transition-colors"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => navigate("/sign-up")}
-                  className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg hover:shadow-xl"
-                >
-                  Get Started
-                </button>
-              </SignedOut>
-              <SignedIn>
-                <button
-                  onClick={() => navigate("/dashboard")}
-                  className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all font-medium mr-3"
-                >
-                  Dashboard
-                </button>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
+              {!currentUser ? (
+                <>
+                  <button
+                    onClick={() => navigate("/sign-in")}
+                    className="text-gray-600 hover:text-indigo-600 font-medium transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => navigate("/sign-up")}
+                    className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg hover:shadow-xl"
+                  >
+                    Get Started
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all font-medium mr-3"
+                  >
+                    Dashboard
+                  </button>
+                  <img 
+                    src={currentUser?.photoURL || `https://ui-avatars.com/api/?name=${currentUser?.displayName || 'User'}&background=6366f1&color=fff`}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full cursor-pointer"
+                    onClick={() => navigate("/dashboard/profile")}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -127,29 +136,29 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <SignedOut>
-              <button
-                onClick={() => navigate("/sign-up")}
-                className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2"
-              >
-                Start Your Journey <Rocket className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => navigate("/sign-in")}
-                className="px-8 py-4 text-lg font-semibold border-2 border-gray-300 text-gray-700 rounded-full hover:border-indigo-600 hover:text-indigo-600 transition-all"
-              >
-                I have an account
-              </button>
-            </SignedOut>
-
-            <SignedIn>
+            {!currentUser ? (
+              <>
+                <button
+                  onClick={() => navigate("/sign-up")}
+                  className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2"
+                >
+                  Start Your Journey <Rocket className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => navigate("/sign-in")}
+                  className="px-8 py-4 text-lg font-semibold border-2 border-gray-300 text-gray-700 rounded-full hover:border-indigo-600 hover:text-indigo-600 transition-all"
+                >
+                  I have an account
+                </button>
+              </>
+            ) : (
               <button
                 onClick={() => navigate("/dashboard")}
                 className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2"
               >
                 Continue to Dashboard <TrendingUp className="w-5 h-5" />
               </button>
-            </SignedIn>
+            )}
           </div>
         </div>
       </section>
@@ -276,23 +285,21 @@ export default function Home() {
             careers with Elevare's AI-powered guidance.
           </p>
 
-          <SignedOut>
+          {!currentUser ? (
             <button
               onClick={() => navigate("/sign-up")}
               className="px-10 py-4 text-lg font-semibold bg-white text-purple-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto"
             >
               Get Started for Free <Sparkles className="w-5 h-5" />
             </button>
-          </SignedOut>
-
-          <SignedIn>
+          ) : (
             <button
               onClick={() => navigate("/dashboard")}
               className="px-10 py-4 text-lg font-semibold bg-white text-purple-600 rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto"
             >
               Continue Your Journey <Sparkles className="w-5 h-5" />
             </button>
-          </SignedIn>
+          )}
         </div>
       </section>
 
@@ -327,14 +334,14 @@ export default function Home() {
                 >
                   How It Works
                 </a>
-                <SignedOut>
+                {!currentUser && (
                   <button
                     onClick={() => navigate("/sign-up")}
                     className="block w-full text-gray-600 hover:text-indigo-600 transition-colors text-sm"
                   >
                     Get Started
                   </button>
-                </SignedOut>
+                )}
               </div>
             </div>
 

@@ -23,12 +23,12 @@ import {
 } from "@/features/career/careerSlice";
 import { useGenerateRoadmapMutation } from "@/features/rodemap/roadmapApi";
 import { X, Sparkles, TrendingUp, Loader2 } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/lib/toast";
 
 export default function CareerPredictionModal({ open, onOpenChange }) {
-  const { user } = useUser();
-  const userId = user ? user.id : null;
+  const { currentUser } = useAuth();
+  const userId = currentUser ? currentUser.uid : null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { lastPrediction } = useSelector((state) => state.career);

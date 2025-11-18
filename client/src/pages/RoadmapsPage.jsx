@@ -9,11 +9,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetUserRoadmapsQuery } from "../features/rodemap/roadmapApi";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function RoadmapsPage() {
-  const { user } = useUser();
-  const userId = user ? user.id : null;
+  const { currentUser } = useAuth();
+  const userId = currentUser ? currentUser.uid : null;
   const navigate = useNavigate();
 
   const {

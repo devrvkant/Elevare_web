@@ -1,7 +1,9 @@
-import { UserButton } from "@clerk/clerk-react";
 import { Sparkles } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const MobileHeader = ({ onMenuClick }) => {
+  const { currentUser, logout } = useAuth();
+  
   return (
     <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3">
       <div className="flex items-center justify-between">
@@ -32,9 +34,13 @@ const MobileHeader = ({ onMenuClick }) => {
           </h1>
         </div>
 
-        <div>
-          <UserButton afterSignOutUrl="/" />
-        </div>
+        <button onClick={() => logout()}>
+          <img 
+            src={currentUser?.photoURL || `https://ui-avatars.com/api/?name=${currentUser?.displayName || 'User'}&background=6366f1&color=fff`}
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+          />
+        </button>
       </div>
     </header>
   );
