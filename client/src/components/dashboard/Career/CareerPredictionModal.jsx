@@ -43,13 +43,6 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
     interests: "",
   });
 
-  // Don't sync from Redux formData automatically - it causes persistence issues
-  // useEffect(() => {
-  //   if (formData) {
-  //     setLocalForm(formData);
-  //   }
-  // }, [formData]);
-
   // Clean up state when modal closes
   useEffect(() => {
     if (!open) {
@@ -89,8 +82,6 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
   const handleChange = (field, value) => {
     const updated = { ...localForm, [field]: value };
     setLocalForm(updated);
-    // Don't save to Redux on every change - it persists across modal opens
-    // dispatch(setFormData(updated));
   };
 
   const handlePredict = async (e) => {
