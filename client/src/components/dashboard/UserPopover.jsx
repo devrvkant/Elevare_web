@@ -43,26 +43,26 @@ const UserPopover = () => {
       {/* Avatar Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-full transition-all hover:opacity-80"
+        className="flex items-center gap-2 rounded-full transition-all hover:opacity-80 cursor-pointer"
       >
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${avatarColor}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${avatarColor}`}>
           {userInitials}
         </div>
       </button>
 
       {/* Popover */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-3 px-4 z-50">
+        <div className="absolute right-0 mt-2 w-72 bg-popover rounded-lg shadow-lg border border-border py-3 px-4 z-50">
           {/* User Info */}
-          <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${avatarColor}`}>
+          <div className="flex items-center gap-3 pb-3 border-b border-border">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${avatarColor}`}>
               {userInitials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-900 truncate">
+              <p className="font-semibold text-popover-foreground truncate">
                 {currentUser?.displayName || "User"}
               </p>
-              <p className="text-sm text-gray-500 truncate">
+              <p className="text-sm text-muted-foreground truncate">
                 {currentUser?.email}
               </p>
             </div>
@@ -75,15 +75,15 @@ const UserPopover = () => {
                 setIsOpen(false);
                 window.location.href = '/dashboard/profile';
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors cursor-pointer"
             >
               <User className="w-4 h-4" />
               <span>View Profile</span>
             </button>
-            
+
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>

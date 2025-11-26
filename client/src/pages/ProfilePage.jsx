@@ -17,7 +17,7 @@ const ProfilePage = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    
+
     try {
       setLoading(true);
       setMessage("");
@@ -32,19 +32,19 @@ const ProfilePage = () => {
 
   return (
     <div className="pt-8 space-y-6 max-w-2xl mx-auto">
-      <div className="bg-white shadow-sm border border-gray-200 rounded-2xl p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Settings</h2>
-        
+      <div className="bg-card shadow-sm border border-border rounded-2xl p-6">
+        <h2 className="text-2xl font-bold text-foreground mb-6">Profile Settings</h2>
+
         {/* Profile Picture */}
         <div className="flex items-center gap-6 mb-8">
           <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-bold ${avatarColor}`}>
             {userInitials}
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-foreground">
               {currentUser?.displayName || "User"}
             </h3>
-            <p className="text-sm text-gray-500">{currentUser?.email}</p>
+            <p className="text-sm text-muted-foreground">{currentUser?.email}</p>
           </div>
         </div>
 
@@ -70,13 +70,13 @@ const ProfilePage = () => {
               type="email"
               value={currentUser?.email}
               disabled
-              className="mt-1 bg-gray-50"
+              className="mt-1 bg-muted text-muted-foreground"
             />
-            <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+            <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
           </div>
 
           {message && (
-            <div className={`p-3 rounded-lg text-sm ${message.includes('success') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+            <div className={`p-3 rounded-lg text-sm ${message.includes('success') ? 'bg-green-500/10 text-green-600 dark:text-green-400' : 'bg-destructive/10 text-destructive'}`}>
               {message}
             </div>
           )}
@@ -84,19 +84,19 @@ const ProfilePage = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             {loading ? "Updating..." : "Update Profile"}
           </Button>
         </form>
 
         {/* Danger Zone */}
-        <div className="mt-8 pt-8 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Danger Zone</h3>
+        <div className="mt-8 pt-8 border-t border-border">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Danger Zone</h3>
           <Button
             onClick={() => logout().then(() => window.location.href = '/')}
             variant="outline"
-            className="text-red-600 border-red-300 hover:bg-red-50"
+            className="text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
           >
             Sign Out
           </Button>

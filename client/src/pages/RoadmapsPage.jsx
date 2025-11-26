@@ -60,8 +60,8 @@ export default function RoadmapsPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center space-y-4">
-          <Loader2 className="w-12 h-12 text-purple-600 mx-auto animate-spin" />
-          <p className="text-gray-600">Loading your roadmaps...</p>
+          <Loader2 className="w-12 h-12 text-primary mx-auto animate-spin" />
+          <p className="text-muted-foreground">Loading your roadmaps...</p>
         </div>
       </div>
     );
@@ -71,16 +71,16 @@ export default function RoadmapsPage() {
   if (isError) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="max-w-md w-full bg-white rounded-2xl p-8 border border-gray-200 text-center space-y-4">
-          <h2 className="text-xl font-bold text-gray-900">
+        <div className="max-w-md w-full bg-card rounded-2xl p-8 border border-border text-center space-y-4">
+          <h2 className="text-xl font-bold text-foreground">
             Failed to Load Roadmaps
           </h2>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {error?.data?.message || "Something went wrong. Please try again."}
           </p>
           <Button
             onClick={() => navigate("/dashboard")}
-            className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             Go to Dashboard
           </Button>
@@ -93,9 +93,9 @@ export default function RoadmapsPage() {
   if (!userId) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="max-w-md w-full bg-white rounded-2xl p-8 border border-gray-200 text-center space-y-4">
-          <h2 className="text-xl font-bold text-gray-900">Please Sign In</h2>
-          <p className="text-gray-600">
+        <div className="max-w-md w-full bg-card rounded-2xl p-8 border border-border text-center space-y-4">
+          <h2 className="text-xl font-bold text-foreground">Please Sign In</h2>
+          <p className="text-muted-foreground">
             You need to be signed in to view your roadmaps.
           </p>
         </div>
@@ -107,12 +107,12 @@ export default function RoadmapsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">
           My Roadmaps
         </h1>
         <Button
           onClick={() => navigate("/dashboard")}
-          className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
         >
           <Plus className="w-5 h-5 mr-2" />
           New Roadmap
@@ -121,20 +121,20 @@ export default function RoadmapsPage() {
 
       {/* Roadmaps List */}
       {roadmaps.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center border border-gray-200">
-          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <MapPin className="w-8 h-8 text-purple-600" />
+        <div className="bg-card rounded-2xl p-12 text-center border border-border">
+          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <MapPin className="w-8 h-8 text-primary" />
           </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">
+          <h2 className="text-xl font-bold text-foreground mb-2">
             No roadmaps yet
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
             Start your career journey by generating your first personalized
             roadmap
           </p>
           <Button
             onClick={() => navigate("/dashboard")}
-            className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Sparkles className="w-5 h-5 mr-2" />
             Generate First Roadmap
@@ -146,14 +146,14 @@ export default function RoadmapsPage() {
             <div
               key={roadmap._id}
               onClick={() => navigate(`/dashboard/roadmaps/${roadmap._id}`)}
-              className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-purple-400 hover:shadow-lg transition-all duration-300 cursor-pointer group"
+              className="bg-card rounded-2xl p-6 border border-border hover:border-primary hover:shadow-lg transition-all duration-300 cursor-pointer group"
             >
               {/* Career Title with Time */}
               <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors flex-1">
+                <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors flex-1">
                   {capitalizeWords(roadmap.career)}
                 </h3>
-                <div className="flex items-center gap-1 text-xs text-gray-500 flex-shrink-0">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
                   <Clock className="w-3.5 h-3.5" />
                   <span>{formatDate(roadmap.createdAt)}</span>
                 </div>
@@ -161,35 +161,35 @@ export default function RoadmapsPage() {
 
               {/* Node Count */}
               {roadmap.steps && roadmap.steps.length > 0 && (
-                <p className="text-sm text-purple-600 mb-3 font-medium flex items-center gap-1">
+                <p className="text-sm text-primary mb-3 font-medium flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
                   {roadmap.steps.length} learning steps
                 </p>
               )}
 
               {/* Summary/Description */}
-              <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                 {roadmap.content
                   ? (() => {
-                      try {
-                        const data = JSON.parse(roadmap.content);
-                        return (
-                          data.description ||
-                          "A comprehensive learning path to achieve your career goals with structured milestones and resources."
-                        );
-                      } catch {
-                        return "A personalized roadmap designed to guide you through your career journey step by step.";
-                      }
-                    })()
+                    try {
+                      const data = JSON.parse(roadmap.content);
+                      return (
+                        data.description ||
+                        "A comprehensive learning path to achieve your career goals with structured milestones and resources."
+                      );
+                    } catch {
+                      return "A personalized roadmap designed to guide you through your career journey step by step.";
+                    }
+                  })()
                   : "A personalized roadmap designed to guide you through your career journey step by step."}
               </p>
 
               {/* Action */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <span className="text-sm font-semibold text-purple-600 group-hover:text-purple-700">
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <span className="text-sm font-semibold text-primary group-hover:text-primary/80">
                   View Roadmap
                 </span>
-                <TrendingUp className="w-5 h-5 text-purple-600 group-hover:translate-x-1 transition-transform" />
+                <TrendingUp className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           ))}

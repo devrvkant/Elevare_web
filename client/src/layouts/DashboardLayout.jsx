@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Sidebar from "../components/dashboard/Sidebar/Sidebar";
 import MobileHeader from "../components/dashboard/MobileHeader";
 import UserPopover from "../components/dashboard/UserPopover";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 const DashboardLayout = () => {
   const { currentUser } = useAuth();
@@ -16,7 +17,7 @@ const DashboardLayout = () => {
     location.pathname !== "/dashboard/roadmaps";
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen bg-background flex overflow-hidden">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
@@ -27,17 +28,18 @@ const DashboardLayout = () => {
 
         {/* Desktop Header - Hide on roadmap detail page */}
         {!isRoadmapDetailPage && (
-          <header className="hidden lg:block bg-white border-b border-gray-200 flex-shrink-0">
+          <header className="hidden lg:block bg-card border-b border-border flex-shrink-0">
             <div className="px-8 py-4 flex justify-between items-center">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-foreground">
                   Welcome {currentUser?.displayName || currentUser?.email?.split('@')[0] || "User"}!
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Let's build something amazing today
+                <p className="text-sm text-muted-foreground mt-1">
+                  Let's build some amazing skills.
                 </p>
               </div>
               <div className="flex items-center gap-4">
+                <ThemeToggle />
                 <UserPopover />
               </div>
             </div>

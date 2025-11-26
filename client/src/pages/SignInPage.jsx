@@ -48,11 +48,11 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/20 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-purple-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse animation-delay-2000"></div>
       </div>
 
       <div className="relative w-full max-w-md mx-auto">
@@ -60,23 +60,23 @@ const SignInPage = () => {
         <div className="text-center mb-8">
           <button
             onClick={() => navigate("/")}
-            className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 hover:from-indigo-700 hover:to-purple-700 transition-all"
+            className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent mb-4 hover:from-primary/80 hover:to-purple-700 transition-all"
           >
             Elevare
           </button>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Welcome back!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Sign in to continue your career journey
           </p>
         </div>
 
         {/* Sign In Card */}
-        <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-8">
+        <div className="bg-card rounded-2xl shadow-2xl border border-border p-8">
           {/* Error Message */}
           {(error || authError) && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+            <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-lg text-sm">
               {error || authError}
             </div>
           )}
@@ -86,7 +86,7 @@ const SignInPage = () => {
             onClick={handleGoogleSignIn}
             disabled={loading}
             type="button"
-            className="w-full mb-6 border-2 border-gray-200 bg-white text-gray-700 hover:border-indigo-300 hover:bg-gray-50"
+            className="w-full mb-6 border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-accent"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path
@@ -111,10 +111,10 @@ const SignInPage = () => {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">or</span>
+              <span className="px-4 bg-card text-muted-foreground">or</span>
             </div>
           </div>
 
@@ -149,7 +149,7 @@ const SignInPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 mt-4"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 mt-4"
             >
               {loading ? "Signing in..." : "Continue"}
             </Button>
@@ -158,11 +158,11 @@ const SignInPage = () => {
 
         {/* Sign Up Link */}
         <div className="text-center mt-6">
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Don't have an account?{" "}
             <Link
               to="/sign-up"
-              className="text-indigo-600 hover:text-indigo-700 font-semibold underline"
+              className="text-primary hover:text-primary/80 font-semibold underline"
             >
               Sign up for free
             </Link>

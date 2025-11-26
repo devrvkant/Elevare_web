@@ -187,27 +187,27 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogContent
-        className="max-w-3xl max-h-[90vh] p-0 overflow-hidden flex flex-col"
+        className="max-w-3xl max-h-[90vh] p-0 overflow-hidden flex flex-col bg-card border-border"
         showCloseButton={false}
       >
         {/* Fixed Header Section */}
-        <div className="flex-shrink-0 px-6 pt-5 pb-3 border-b border-gray-200 bg-white">
+        <div className="flex-shrink-0 px-6 pt-5 pb-3 border-b border-border bg-card">
           {/* Close Button */}
-          <DialogClose className="absolute right-4 top-4 z-10 rounded-full p-1.5 hover:bg-purple-100 transition-colors">
-            <X className="h-4 w-4 text-gray-600" />
+          <DialogClose className="absolute right-4 top-4 z-10 rounded-full p-1.5 hover:bg-accent transition-colors">
+            <X className="h-4 w-4 text-muted-foreground" />
           </DialogClose>
 
           {/* Header with Gradient */}
           <DialogHeader className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-purple-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shadow-sm">
+                <Sparkles className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <DialogTitle className="text-left">
+                <DialogTitle className="text-left text-foreground">
                   AI Career Prediction
                 </DialogTitle>
-                <DialogDescription className="text-left mt-1">
+                <DialogDescription className="text-left mt-1 text-muted-foreground">
                   Fill in your details and let our AI predict the perfect career
                   path for you
                 </DialogDescription>
@@ -225,7 +225,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
               <div className="space-y-2">
                 <Label
                   htmlFor="course"
-                  className="text-sm font-semibold text-gray-700"
+                  className="text-sm font-semibold text-foreground"
                 >
                   Course / Degree <span className="text-pink-500">*</span>
                 </Label>
@@ -234,14 +234,14 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                   placeholder="e.g., Computer Science, Business, Engineering"
                   value={localForm.course}
                   onChange={(e) => handleChange("course", e.target.value)}
-                  className="h-12 border-gray-300 focus-visible:border-purple-500 focus-visible:ring-purple-200"
+                  className="h-12 border-input focus-visible:border-primary focus-visible:ring-ring"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label
                   htmlFor="specialization"
-                  className="text-sm font-semibold text-gray-700"
+                  className="text-sm font-semibold text-foreground"
                 >
                   Specialization <span className="text-pink-500">*</span>
                 </Label>
@@ -252,7 +252,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                   onChange={(e) =>
                     handleChange("specialization", e.target.value)
                   }
-                  className="h-12 border-gray-300 focus-visible:border-purple-500 focus-visible:ring-purple-200"
+                  className="h-12 border-input focus-visible:border-primary focus-visible:ring-ring"
                 />
               </div>
             </div>
@@ -261,7 +261,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
             <div className="space-y-2">
               <Label
                 htmlFor="skills"
-                className="text-sm font-semibold text-gray-700"
+                className="text-sm font-semibold text-foreground"
               >
                 Skills <span className="text-pink-500">*</span>
               </Label>
@@ -271,9 +271,9 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                 value={localForm.skills}
                 onChange={(e) => handleChange("skills", e.target.value)}
                 rows={3}
-                className="border-gray-300 focus:border-purple-500 focus:ring-purple-200"
+                className="border-input focus:border-primary focus:ring-ring"
               />
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Separate multiple skills with commas
               </p>
             </div>
@@ -282,7 +282,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
             <div className="space-y-2">
               <Label
                 htmlFor="interests"
-                className="text-sm font-semibold text-gray-700"
+                className="text-sm font-semibold text-foreground"
               >
                 Interests <span className="text-pink-500">*</span>
               </Label>
@@ -292,9 +292,9 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                 value={localForm.interests}
                 onChange={(e) => handleChange("interests", e.target.value)}
                 rows={3}
-                className="border-gray-300 focus:border-purple-500 focus:ring-purple-200"
+                className="border-input focus:border-primary focus:ring-ring"
               />
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Separate multiple interests with commas
               </p>
             </div>
@@ -303,7 +303,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 hover:from-pink-600 hover:via-purple-600 hover:to-violet-700 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all"
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
               {isLoading ? (
                 <>
@@ -322,16 +322,16 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
           {/* Prediction Result */}
           {lastPrediction && (
             <div className="mt-8 space-y-4 px-6 pb-5">
-              <div className="bg-gradient-to-r from-pink-50 via-purple-50 to-violet-50 border-2 border-purple-200 rounded-2xl p-6 shadow-md">
+              <div className="bg-card border-2 border-primary/20 rounded-2xl p-6 shadow-md">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <TrendingUp className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-purple-900 mb-2">
-                      🎯 Your Predicted Career Path
+                    <h3 className="text-sm font-semibold text-foreground mb-2">
+                      Your Predicted Career Path
                     </h3>
-                    <p className="text-2xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 to-violet-600 bg-clip-text text-transparent capitalize">
+                    <p className="text-2xl font-bold text-primary capitalize">
                       {lastPrediction}
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                 <Button
                   onClick={handleGenerateRoadmap}
                   disabled={isGeneratingRoadmap}
-                  className="w-full mt-6 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold shadow-md hover:shadow-lg transition-all"
+                  className="w-full mt-6 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   {isGeneratingRoadmap ? (
                     <>
@@ -361,7 +361,7 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="w-full border-gray-300 text-gray-700 hover:bg-gray-100"
+                className="w-full border-border text-foreground hover:bg-accent cursor-pointer"
               >
                 Try Another Prediction
               </Button>

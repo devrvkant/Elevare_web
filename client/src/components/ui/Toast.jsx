@@ -40,29 +40,28 @@ const ToastItem = ({ toast, onRemove }) => {
 
   const getStyles = () => {
     const baseStyles =
-      "flex items-start gap-3 min-w-[300px] max-w-md p-4 rounded-lg shadow-lg border backdrop-blur-sm transition-all duration-300";
+      "flex items-start gap-3 min-w-[300px] max-w-md p-4 rounded-lg shadow-lg border backdrop-blur-sm transition-all duration-300 bg-card";
 
     switch (toast.type) {
       case "success":
-        return `${baseStyles} bg-green-50/95 border-green-200`;
+        return `${baseStyles} bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400`;
       case "error":
-        return `${baseStyles} bg-red-50/95 border-red-200`;
+        return `${baseStyles} bg-destructive/10 border-destructive/20 text-destructive`;
       case "warning":
-        return `${baseStyles} bg-yellow-50/95 border-yellow-200`;
+        return `${baseStyles} bg-yellow-500/10 border-yellow-500/20 text-yellow-600 dark:text-yellow-400`;
       case "info":
-        return `${baseStyles} bg-blue-50/95 border-blue-200`;
+        return `${baseStyles} bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400`;
       default:
-        return `${baseStyles} bg-white/95 border-gray-200`;
+        return `${baseStyles} bg-card border-border text-foreground`;
     }
   };
 
   return (
     <div
-      className={`${getStyles()} ${
-        isExiting
-          ? "opacity-0 translate-x-full scale-95"
-          : "opacity-100 translate-x-0 scale-100"
-      }`}
+      className={`${getStyles()} ${isExiting
+        ? "opacity-0 translate-x-full scale-95"
+        : "opacity-100 translate-x-0 scale-100"
+        }`}
       style={{
         animation: isExiting ? "none" : "toastSlideIn 0.3s ease-out forwards",
       }}
@@ -73,7 +72,7 @@ const ToastItem = ({ toast, onRemove }) => {
       </p>
       <button
         onClick={handleClose}
-        className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+        className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
         aria-label="Close"
       >
         <X className="w-4 h-4" />

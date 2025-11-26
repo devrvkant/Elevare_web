@@ -17,7 +17,6 @@ import {
   ReactFlow,
   Background,
   Controls,
-  MiniMap,
   useNodesState,
   useEdgesState,
   Handle,
@@ -28,13 +27,13 @@ import "@xyflow/react/dist/style.css";
 // Custom Node Component
 const CustomNode = ({ data }) => {
   const categoryColors = {
-    fundamentals: "from-blue-500 to-cyan-500",
-    intermediate: "from-purple-500 to-pink-500",
-    advanced: "from-orange-500 to-red-500",
-    specialization: "from-green-500 to-emerald-500",
+    fundamentals: "from-blue-500/10 to-cyan-500/10 border-blue-500/20 text-blue-500",
+    intermediate: "from-purple-500/10 to-pink-500/10 border-purple-500/20 text-purple-500",
+    advanced: "from-orange-500/10 to-red-500/10 border-orange-500/20 text-orange-500",
+    specialization: "from-green-500/10 to-emerald-500/10 border-green-500/20 text-green-500",
   };
 
-  const gradient = categoryColors[data.category] || "from-gray-500 to-gray-600";
+  const style = categoryColors[data.category] || "from-muted/50 to-muted border-border text-muted-foreground";
 
   return (
     <div className="group">
@@ -42,36 +41,36 @@ const CustomNode = ({ data }) => {
       <Handle
         type="target"
         position={Position.Top}
-        className="w-3 h-3 !bg-purple-500 border-2 border-white"
+        className="w-3 h-3 !bg-primary border-2 border-background"
       />
 
-      <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 w-[280px]">
-        {/* Header with gradient */}
-        <div className={`bg-gradient-to-r ${gradient} p-4 rounded-t-xl`}>
+      <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-border hover:border-primary/50 w-[280px] overflow-hidden">
+        {/* Header with subtle gradient */}
+        <div className={`bg-gradient-to-r ${style.split(" ").slice(0, 2).join(" ")} p-4 border-b ${style.split(" ").find(c => c.startsWith("border"))}`}>
           <div className="flex items-center gap-3 mb-2">
             {/* Step Number Circle */}
-            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/40">
-              <span className="text-white font-bold text-sm">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 bg-background/50 backdrop-blur-sm ${style.split(" ").find(c => c.startsWith("border"))}`}>
+              <span className={`font-bold text-sm ${style.split(" ").pop()}`}>
                 {data.stepNumber}
               </span>
             </div>
-            <span className="text-xs font-semibold text-white/90 uppercase tracking-wide">
+            <span className={`text-xs font-bold uppercase tracking-wide ${style.split(" ").pop()}`}>
               {data.category}
             </span>
           </div>
-          <h3 className="text-white font-bold text-lg leading-tight">
+          <h3 className="text-foreground font-bold text-lg leading-tight">
             {data.title}
           </h3>
         </div>
 
         {/* Body */}
         <div className="p-4 space-y-3">
-          <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
             {data.description}
           </p>
 
           {data.duration && (
-            <div className="flex items-center gap-2 text-xs text-purple-600">
+            <div className="flex items-center gap-2 text-xs text-primary">
               <Clock className="w-3.5 h-3.5" />
               <span className="font-medium">{data.duration}</span>
             </div>
@@ -82,7 +81,7 @@ const CustomNode = ({ data }) => {
               href={data.learnMoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-semibold text-purple-600 hover:text-purple-700 transition-colors group-hover:underline"
+              className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors group-hover:underline"
               onClick={(e) => e.stopPropagation()}
             >
               <span>Learn More</span>
@@ -96,7 +95,7 @@ const CustomNode = ({ data }) => {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="w-3 h-3 !bg-purple-500 border-2 border-white"
+        className="w-3 h-3 !bg-primary border-2 border-background"
       />
     </div>
   );
@@ -208,13 +207,13 @@ export default function RoadmapPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <div className="text-center space-y-4">
-          <Loader2 className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
-          <h2 className="text-2xl font-bold text-gray-800">
+          <Loader2 className="w-16 h-16 animate-spin text-primary mx-auto" />
+          <h2 className="text-2xl font-bold text-foreground">
             Loading your roadmap...
           </h2>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Please wait while we fetch your career path
           </p>
         </div>
@@ -225,16 +224,16 @@ export default function RoadmapPage() {
   // Error state
   if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-pink-50 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-red-100">
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-card rounded-3xl p-8 shadow-xl border border-destructive/20">
           <div className="text-center space-y-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto">
-              <AlertCircle className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 bg-destructive/10 rounded-full flex items-center justify-center mx-auto">
+              <AlertCircle className="w-10 h-10 text-destructive" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-2xl font-bold text-foreground">
               Generation Failed
             </h2>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {error ||
                 "We encountered an error while generating your roadmap. This could be due to high demand or a temporary service issue."}
             </p>
@@ -242,7 +241,7 @@ export default function RoadmapPage() {
             <div className="flex flex-col gap-3 mt-6">
               <Button
                 onClick={() => navigate("/dashboard")}
-                className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 hover:from-pink-600 hover:via-purple-600 hover:to-violet-700"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try Again
@@ -250,18 +249,18 @@ export default function RoadmapPage() {
               <Button
                 onClick={() => navigate("/dashboard/roadmaps")}
                 variant="outline"
-                className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
+                className="w-full border-border text-foreground hover:bg-accent"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 View My Roadmaps
               </Button>
             </div>
 
-            <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100 text-left">
-              <p className="text-sm font-semibold text-blue-900 mb-2">
+            <div className="mt-6 p-4 bg-muted rounded-xl border border-border text-left">
+              <p className="text-sm font-semibold text-foreground mb-2">
                 💡 Tips:
               </p>
-              <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                 <li>Check your internet connection</li>
                 <li>Try again in a few moments</li>
                 <li>If the problem persists, contact support</li>
@@ -276,20 +275,20 @@ export default function RoadmapPage() {
   // Not found state
   if (!roadmap) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-purple-100 text-center space-y-4">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto">
-            <Target className="w-10 h-10 text-white" />
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-card rounded-3xl p-8 shadow-xl border border-border text-center space-y-4">
+          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
+            <Target className="w-10 h-10 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h2 className="text-2xl font-bold text-foreground">
             Roadmap Not Found
           </h2>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             This roadmap doesn't exist or has been removed.
           </p>
           <Button
             onClick={() => navigate("/dashboard/roadmaps")}
-            className="bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 hover:from-pink-600 hover:via-purple-600 hover:to-violet-700"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             View My Roadmaps
@@ -302,23 +301,23 @@ export default function RoadmapPage() {
   // Old format roadmap - show message to regenerate
   if (isOldFormat || nodes.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-violet-50 flex items-center justify-center p-6">
-        <div className="max-w-xl w-full bg-white rounded-3xl p-8 shadow-xl border border-purple-100 text-center space-y-4">
-          <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center mx-auto">
-            <RefreshCw className="w-10 h-10 text-white" />
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="max-w-xl w-full bg-card rounded-3xl p-8 shadow-xl border border-border text-center space-y-4">
+          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
+            <RefreshCw className="w-10 h-10 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">Upgrade Required</h2>
-          <p className="text-gray-600 leading-relaxed">
+          <h2 className="text-2xl font-bold text-foreground">Upgrade Required</h2>
+          <p className="text-muted-foreground leading-relaxed">
             This roadmap was created with an older format. To experience the new{" "}
             <strong>interactive node-based graph</strong> with clickable
             learning resources, please generate a new roadmap!
           </p>
 
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-purple-200">
-            <p className="text-sm font-semibold text-purple-900 mb-2">
+          <div className="bg-muted rounded-xl p-4 border border-border">
+            <p className="text-sm font-semibold text-foreground mb-2">
               ✨ New Features:
             </p>
-            <ul className="text-sm text-gray-700 space-y-1 text-left list-disc list-inside">
+            <ul className="text-sm text-muted-foreground space-y-1 text-left list-disc list-inside">
               <li>Interactive visual graph with connected nodes</li>
               <li>Color-coded by learning category</li>
               <li>Click nodes to see details</li>
@@ -330,7 +329,7 @@ export default function RoadmapPage() {
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               onClick={() => navigate("/dashboard")}
-              className="flex-1 bg-gradient-to-r from-pink-500 via-purple-500 to-violet-600 hover:from-pink-600 hover:via-purple-600 hover:to-violet-700"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Generate New Roadmap
@@ -338,7 +337,7 @@ export default function RoadmapPage() {
             <Button
               onClick={() => navigate("/dashboard/roadmaps")}
               variant="outline"
-              className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50"
+              className="flex-1 border-border text-foreground hover:bg-accent"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               View All Roadmaps
@@ -351,32 +350,34 @@ export default function RoadmapPage() {
 
   // Main layout - Interactive graph view
   return (
-    <div className="h-full bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex flex-col overflow-hidden">
+    <div className="h-full bg-background flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm flex-shrink-0 z-50">
-        <div className="flex items-center justify-between px-6 py-3">
+      <div className="bg-background/80 backdrop-blur-lg border-b border-border shadow-sm flex-shrink-0 z-50">
+        <div className="relative flex items-center justify-between px-4 sm:px-6 py-3">
           <Button
-            variant="outline"
+            variant="ghost"
             onClick={() => navigate(getBackPath())}
-            className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 transition-all"
+            className="p-2 sm:px-4 sm:py-2 h-auto sm:h-10 border-0 sm:border sm:border-border text-foreground hover:bg-accent hover:border-primary/50 transition-all"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+            <ArrowLeft className="w-5 h-5 sm:w-4 sm:h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Back</span>
           </Button>
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-purple-600" />
-            <span className="text-sm sm:text-base font-medium text-gray-700 truncate max-w-[200px] sm:max-w-none">
+
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 sm:gap-3 pointer-events-none">
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <span className="text-sm sm:text-base font-medium text-foreground truncate max-w-[150px] sm:max-w-none">
               {roadmapData?.title || roadmap.career || "Career Roadmap"}
             </span>
           </div>
-          <div className="w-[80px] sm:w-[100px]" />
+
+          <div className="w-9 sm:w-[100px]" />
         </div>
       </div>
 
       {/* Description Banner */}
       {roadmapData?.description && (
-        <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 px-6 py-3 shadow-lg flex-shrink-0">
-          <p className="text-white text-sm leading-relaxed text-center">
+        <div className="bg-muted/30 border-b border-border px-6 py-4 shadow-sm flex-shrink-0 backdrop-blur-sm">
+          <p className="text-muted-foreground text-sm leading-relaxed text-center max-w-4xl mx-auto">
             {roadmapData.description}
           </p>
         </div>
@@ -390,60 +391,47 @@ export default function RoadmapPage() {
         <ReactFlow
           nodes={nodesState}
           edges={edgesState}
-          onNodesChange={() => {}}
-          onEdgesChange={() => {}}
+          onNodesChange={() => { }}
+          onEdgesChange={() => { }}
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           fitView
           fitViewOptions={{ padding: 0.2, maxZoom: 1 }}
-          className="bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 w-full h-full"
+          className="bg-background w-full h-full"
           minZoom={0.1}
           maxZoom={1.5}
         >
-          <Background color="#e9d5ff" gap={16} size={1} variant="dots" />
-          <Controls className="bg-white/90 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg" />
-          <MiniMap
-            nodeColor={(node) => {
-              const category = node.data.category;
-              const colors = {
-                fundamentals: "#3b82f6",
-                intermediate: "#a855f7",
-                advanced: "#f97316",
-                specialization: "#10b981",
-              };
-              return colors[category] || "#6b7280";
-            }}
-            className="bg-white/90 backdrop-blur-lg border border-purple-200 rounded-lg shadow-lg"
-            maskColor="rgb(240, 240, 255, 0.6)"
-          />
+          <Background color="#9333ea" gap={16} size={1} variant="dots" className="opacity-20" />
+          <Controls className="!bg-card/90 backdrop-blur-lg border !border-border !rounded-none shadow-lg [&>button]:!bg-card [&>button]:!text-primary [&>button]:!border-border [&>button:hover]:!bg-accent [&>button_svg]:!fill-current [&>button]:!rounded-none" />
+
         </ReactFlow>
 
         {/* Selected Node Detail Panel */}
         {selectedNode && (
-          <div className="absolute bottom-6 right-6 bg-white rounded-2xl shadow-2xl border-2 border-purple-200 p-6 max-w-md w-full sm:w-96 z-10 animate-in slide-in-from-bottom-4">
+          <div className="fixed inset-x-4 bottom-4 sm:absolute sm:bottom-6 sm:right-6 sm:inset-auto bg-card rounded-2xl shadow-2xl border-2 border-border p-6 sm:max-w-md w-auto sm:w-96 z-50 animate-in slide-in-from-bottom-4">
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
-                <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">
+                <span className="text-xs font-semibold text-primary uppercase tracking-wide">
                   {selectedNode.category}
                 </span>
-                <h3 className="text-xl font-bold text-gray-800 mt-1">
+                <h3 className="text-xl font-bold text-foreground mt-1">
                   {selectedNode.title}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-sm text-gray-600 leading-relaxed mb-4">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               {selectedNode.description}
             </p>
 
             {selectedNode.duration && (
-              <div className="flex items-center gap-2 text-sm text-purple-600 mb-4">
+              <div className="flex items-center gap-2 text-sm text-primary mb-4">
                 <Clock className="w-4 h-4" />
                 <span className="font-medium">{selectedNode.duration}</span>
               </div>
@@ -454,7 +442,7 @@ export default function RoadmapPage() {
                 href={selectedNode.learnMoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-xl"
+                className="flex items-center justify-center gap-2 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-xl"
               >
                 <span>Learn More</span>
                 <ExternalLink className="w-4 h-4" />
@@ -464,14 +452,14 @@ export default function RoadmapPage() {
         )}
 
         {/* Floating Help Card */}
-        <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-lg rounded-xl shadow-lg border border-purple-200 p-4 max-w-xs hidden lg:block">
+        <div className="absolute top-6 left-6 bg-card/90 backdrop-blur-lg rounded-xl shadow-lg border border-border p-4 max-w-xs hidden lg:block">
           <div className="flex items-center gap-2 mb-2">
-            <Maximize2 className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-semibold text-gray-800">
+            <Maximize2 className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
               Interactive Roadmap
             </span>
           </div>
-          <ul className="text-xs text-gray-600 space-y-1">
+          <ul className="text-xs text-muted-foreground space-y-1">
             <li>• Click on any node to see details</li>
             <li>• Zoom and pan to explore</li>
             <li>• Click "Learn More" to visit resources</li>
