@@ -48,6 +48,7 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
+          VITE_APP_ENV: ${{  vars.VITE_APP_ENV  }}
           # Add any other VITE_ prefixed environment variables you need here
       
       - name: Build And Deploy
@@ -76,4 +77,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_FOREST_0AB9F7900 }}
           action: "close"
+
 
