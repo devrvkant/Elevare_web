@@ -22,7 +22,8 @@ Thumbs.db
 
 # ───── Client-specific ─────
 client/node_modules/
-# client/.env is now committed for production
+# client/.env is now ignored for security
+client/.env
 client/.env.local
 client/build/
 client/dist/
