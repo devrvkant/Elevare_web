@@ -58,7 +58,7 @@ export default function RoadmapsPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">
           <Loader2 className="w-12 h-12 text-primary mx-auto animate-spin" />
           <p className="text-muted-foreground">Loading your roadmaps...</p>

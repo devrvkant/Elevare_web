@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
+import authReducer from "../features/auth/authSlice";
 import careerReducer from "../features/career/careerSlice";
 import { careerApi } from "../features/career/careerApi";
 import roadmapReducer from "../features/rodemap/roadmapSlice";

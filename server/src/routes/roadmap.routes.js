@@ -8,8 +8,8 @@ import {
 
 const roadmapRouter = Router();
 
-// SSE endpoint must be GET
-roadmapRouter.get("/generate", generateRoadmap);
+// Generate a new roadmap
+roadmapRouter.post("/generate", generateRoadmap);
 
 // Get all roadmaps for a user
 roadmapRouter.get("/user", getUserRoadmaps);

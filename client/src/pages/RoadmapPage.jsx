@@ -44,7 +44,7 @@ const CustomNode = ({ data }) => {
         className="w-3 h-3 !bg-primary border-2 border-background"
       />
 
-      <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-border hover:border-primary/50 w-[280px] overflow-hidden">
+      <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-border hover:border-primary/50 w-[280px] overflow-hidden cursor-pointer">
         {/* Header with subtle gradient */}
         <div className={`bg-gradient-to-r ${style.split(" ").slice(0, 2).join(" ")} p-4 border-b ${style.split(" ").find(c => c.startsWith("border"))}`}>
           <div className="flex items-center gap-3 mb-2">

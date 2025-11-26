@@ -11,10 +11,9 @@ export const roadmapApi = createApi({
     // Generate a new roadmap (creates in DB and returns complete roadmap with _id)
     generateRoadmap: builder.mutation({
       query: ({ career, userId }) => ({
-        url: `/generate?career=${encodeURIComponent(
-          career
-        )}&userId=${encodeURIComponent(userId)}`,
-        method: "GET",
+        url: "/generate",
+        method: "POST",
+        body: { career, userId },
       }),
       invalidatesTags: ["Roadmaps"],
     }),

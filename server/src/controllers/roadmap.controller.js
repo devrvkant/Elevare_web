@@ -2,14 +2,13 @@ import { GoogleGenAI } from "@google/genai";
 import { config } from "../config/env.js";
 import Roadmap from "../models/rodemap.model.js";
 
-// Reuse the same Gemini client
 const ai = new GoogleGenAI({
   apiKey: config.elevareAiApiKey,
 });
 
 export const generateRoadmap = async (req, res) => {
   try {
-    const { career, userId } = req.query;
+    const { career, userId } = req.body;
 
     if (!career || !userId) {
       return res.status(400).json({
@@ -21,57 +20,73 @@ export const generateRoadmap = async (req, res) => {
     const prompt = `
       Create a detailed, interactive roadmap for becoming a successful ${career}.
 
-      Return ONLY a valid JSON object (no markdown, no explanation) with this exact structure:
-      {
-        "title": "Career title",
-        "description": "Brief overview (2-3 sentences)",
-        "nodes": [
-          {
-            "id": "unique_id",
-            "title": "Node title",
-            "description": "What you'll learn (2-3 sentences)",
-            "category": "fundamentals|intermediate|advanced|specialization",
-            "learnMoreUrl": "https://actual-learning-resource-url.com",
-            "duration": "X weeks/months"
-          }
-        ]
-      }
-
-      Guidelines:
+      Structure the response exactly according to the schema.
       - Create 9-16 nodes organized in a learning progression
       - Use real, working URLs for learnMoreUrl (official docs, MDN, W3Schools, freeCodeCamp, etc.)
-      - Categories: fundamentals (basics), intermediate (building skills), advanced (expert level), specialization (career-specific)
+      - Categories: fundamentals, intermediate, advanced, specialization
       - Make descriptions clear and actionable
       - Include realistic durations
     `;
 
-    // Generate complete content from Gemini
+    // Define schema for structured output
+    const schema = {
+      type: "OBJECT",
+      properties: {
+        title: { type: "STRING" },
+        description: { type: "STRING" },
+        nodes: {
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              id: { type: "STRING" },
+              title: { type: "STRING" },
+              description: { type: "STRING" },
+              category: {
+                type: "STRING",
+                enum: [
+                  "fundamentals",
+                  "intermediate",
+                  "advanced",
+                  "specialization",
+                ],
+              },
+              learnMoreUrl: { type: "STRING" },
+              duration: { type: "STRING" },
+            },
+            required: [
+              "id",
+              "title",
+              "description",
+              "category",
+              "learnMoreUrl",
+              "duration",
+            ],
+          },
+        },
+      },
+      required: ["title", "description", "nodes"],
+    };
+
+    // Generate complete content from Gemini using JSON mode
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: schema,
+        thinkingConfig: {
+          thinkingBudget: 0, // Disable Thinking
+        }
+      },
     });
 
-    let generatedContent = response.text;
-
-    if (!generatedContent || generatedContent.length === 0) {
-      return res.status(500).json({
-        success: false,
-        message: "No content generated from AI",
-      });
-    }
-
-    // Clean up the response - remove markdown code blocks if present
-    generatedContent = generatedContent
-      .replace(/```json\s*/g, "")
-      .replace(/```\s*/g, "")
-      .trim();
-
-    // Parse the JSON response
     let roadmapData;
     try {
-      roadmapData = JSON.parse(generatedContent);
+      // With JSON mode, we can directly parse the text
+      roadmapData = JSON.parse(response.text);
 
-      // Validate structure
+      // Validate structure (double check)
       if (!roadmapData.nodes || !Array.isArray(roadmapData.nodes)) {
         throw new Error("Invalid roadmap structure");
       }
@@ -92,7 +107,7 @@ export const generateRoadmap = async (req, res) => {
       status: "completed",
     });
 
-    console.log(`✅ Roadmap ${roadmap._id} created successfully`);
+    console.log(`Roadmap ${roadmap._id} created successfully`);
 
     // Return the complete roadmap with MongoDB _id
     return res.status(201).json({
@@ -184,33 +199,6 @@ export const getRoadmapById = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch roadmap",
-    });
-  }
-};
-
-// Delete a roadmap
-export const deleteRoadmap = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const roadmap = await Roadmap.findByIdAndDelete(id);
-
-    if (!roadmap) {
-      return res.status(404).json({
-        success: false,
-        message: "Roadmap not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      message: "Roadmap deleted successfully",
-    });
-  } catch (error) {
-    console.error("Error deleting roadmap:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete roadmap",
     });
   }
 };
