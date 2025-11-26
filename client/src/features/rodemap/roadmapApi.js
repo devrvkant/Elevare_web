@@ -29,14 +29,6 @@ export const roadmapApi = createApi({
       transformResponse: (response) => response.data,
       providesTags: (result, error, id) => [{ type: "Roadmaps", id }],
     }),
-    // Delete a roadmap
-    deleteRoadmap: builder.mutation({
-      query: (id) => ({
-        url: `/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Roadmaps"],
-    }),
   }),
 });
 
