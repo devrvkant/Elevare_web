@@ -12,6 +12,8 @@ Elevare is a full-stack web application that leverages artificial intelligence t
 - 🗺️ **Smart Roadmap Generation** - Create customized learning paths with AI assistance
 - 🛠️ **AI Tools Hub** - Access a curated collection of AI-powered productivity tools
 - 📊 **History Tracking** - Keep track of your career predictions and roadmaps
+- 🌓 **Theme Switcher** - Seamlessly toggle between Light and Dark modes
+- 🌌 **Cosmic Night Theme** - Experience a stunning, deep-space inspired dark interface
 - 🔐 **Secure Authentication** - User authentication powered by Clerk
 - 📱 **Responsive Design** - Seamless experience across all devices
 - 🎨 **Modern UI/UX** - Beautiful interface built with Tailwind CSS and Radix UI
@@ -218,6 +220,12 @@ The main hub featuring:
 - Track all your career predictions
 - Access saved roadmaps
 - Organize your learning journey
+
+### 6. Dynamic Theming
+
+- **Cosmic Night Mode**: A carefully crafted dark theme featuring deep purples and neon accents for an immersive experience.
+- **Theme Persistence**: Your preferred theme (Light/Dark) is saved and automatically applied on your next visit.
+- **Smooth Transitions**: Seamless visual transition when toggling between modes.
 
 ---
 
