@@ -7,6 +7,7 @@ const FIREBASE_MESSAGING_SENDER_ID = import.meta.env.VITE_FIREBASE_MESSAGING_SEN
 const FIREBASE_APP_ID = import.meta.env.VITE_FIREBASE_APP_ID;
 const FIREBASE_MEASUREMENT_ID = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
 const CAREER_API_URL = import.meta.env.VITE_CAREER_API_URL;
+const RESUME_API_URL = import.meta.env.VITE_RESUME_API_URL;
 
 const APP_ENV = import.meta.env.VITE_APP_ENV || "development";
 
@@ -20,4 +21,5 @@ export const config = {
   firebaseAppId: FIREBASE_APP_ID,
   firebaseMeasurementId: FIREBASE_MEASUREMENT_ID,
   careerApiUrl: CAREER_API_URL,
+  resumeApiUrl: RESUME_API_URL || "http://localhost:8000",
 };

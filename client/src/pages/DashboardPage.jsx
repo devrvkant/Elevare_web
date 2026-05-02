@@ -6,6 +6,7 @@ import {
   Brain,
   Map,
   Clock,
+  GitCompareArrows,
   Bookmark,
   Lightbulb,
   Target,
@@ -31,7 +32,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Career Prediction Card */}
         <div
           onClick={() => setModalOpen(true)}
@@ -75,6 +76,26 @@ const Dashboard = () => {
           <div className="flex items-center gap-2 text-primary font-semibold">
             <TrendingUp className="w-5 h-5" />
             <span>View Roadmaps</span>
+          </div>
+        </div>
+        {/* Gap Analysis Card */}
+        <div
+          onClick={() => navigate("/dashboard/gap-analysis")}
+          className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer"
+        >
+          <div className="flex items-start justify-between mb-6">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <GitCompareArrows className="w-8 h-8 text-primary" strokeWidth={2.5} />
+            </div>
+            <ArrowRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+          </div>
+          <h2 className="text-2xl font-bold text-foreground mb-3">Gap Analysis</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            Upload your resume and discover skill gaps for your target career with AI insights
+          </p>
+          <div className="flex items-center gap-2 text-primary font-semibold">
+            <Sparkles className="w-5 h-5" />
+            <span>Analyze Skills</span>
           </div>
         </div>
       </div>

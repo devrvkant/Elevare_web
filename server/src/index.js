@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import { config } from "./config/env.js";
-import connectToMongoDB from "./lib/mongodb.js";
+import connectToMongoDB from "./lib/mongoDB.js";
 import careerRouter from "./routes/carrer.routes.js";
 import roadmapRouter from "./routes/roadmap.routes.js";
+import gapAnalysisRouter from "./routes/gapAnalysis.routes.js";
 
 const PORT = config.port || 5500;
 const app = express();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/career", careerRouter);
 app.use("/api/roadmap", roadmapRouter);
+app.use("/api/gap-analysis", gapAnalysisRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT : ${PORT}`);

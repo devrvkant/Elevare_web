@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router";
-import { LayoutDashboard, Map, User, X, Sparkles } from "lucide-react";
+import { LayoutDashboard, Map, User, X, Sparkles, GitCompareArrows, FileText } from "lucide-react";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
@@ -21,6 +21,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       description: "Your Career Paths",
     },
     {
+      id: "gap-analysis",
+      label: "Gap Analysis",
+      icon: GitCompareArrows,
+      path: "/dashboard/gap-analysis",
+      description: "Skill Gap Insights",
+    },
+    {
+      id: "ats-score",
+      label: "ATS Score",
+      icon: FileText,
+      path: "/dashboard/ats-score",
+      description: "Resume Evaluation",
+    },
+    {
       id: "profile",
       label: "Profile",
       icon: User,
@@ -29,9 +43,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   ];
 
   const isActive = (path) => {
-    // For roadmaps, check if current path starts with /dashboard/roadmaps
     if (path === "/dashboard/roadmaps") {
       return location.pathname.startsWith("/dashboard/roadmaps");
+    }
+    if (path === "/dashboard/gap-analysis") {
+      return location.pathname.startsWith("/dashboard/gap-analysis");
+    }
+    if (path === "/dashboard/ats-score") {
+      return location.pathname.startsWith("/dashboard/ats-score");
     }
     return location.pathname === path;
   };

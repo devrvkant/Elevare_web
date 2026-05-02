@@ -8,6 +8,8 @@ import Dashboard from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import RoadmapsPage from "./pages/RoadmapsPage";
 import RoadmapPage from "./pages/RoadmapPage";
+import GapAnalysisPage from "./pages/GapAnalysisPage";
+import AtsScorePage from "./pages/AtsScorePage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -30,6 +32,9 @@ const router = createBrowserRouter([
           { index: true, Component: Dashboard },
           { path: "roadmaps", Component: RoadmapsPage },
           { path: "roadmaps/:id", Component: RoadmapPage },
+          { path: "gap-analysis", Component: GapAnalysisPage },
+          { path: "gap-analysis/:id", Component: GapAnalysisPage },
+          { path: "ats-score", Component: AtsScorePage },
           { path: "profile", Component: ProfilePage },
         ],
       },
