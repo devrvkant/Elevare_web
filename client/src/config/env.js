@@ -9,10 +9,10 @@ const FIREBASE_MEASUREMENT_ID = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
 const CAREER_API_URL = import.meta.env.VITE_CAREER_API_URL;
 const RESUME_API_URL = import.meta.env.VITE_RESUME_API_URL;
 
-const APP_ENV = import.meta.env.VITE_APP_ENV || "development";
+const IS_PROD = import.meta.env.PROD;
 
 export const config = {
-  apiUrl: APP_ENV === "development" ? "http://localhost:5500" : API_URL,
+  apiUrl: IS_PROD ? API_URL : "http://localhost:5500",
   firebaseApiKey: FIREBASE_API_KEY,
   firebaseAuthDomain: FIREBASE_AUTH_DOMAIN,
   firebaseProjectId: FIREBASE_PROJECT_ID,
