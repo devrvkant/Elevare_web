@@ -99,9 +99,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* ATS Score Card */}
+        {/* Resume Quality Score Card */}
         <div
-          onClick={() => navigate("/dashboard/ats-score")}
+          onClick={() => navigate("/dashboard/resume-quality-score")}
           className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer"
         >
           <div className="flex items-start justify-between mb-6">
@@ -110,13 +110,13 @@ const Dashboard = () => {
             </div>
             <ArrowRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">ATS Score</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-3">Resume Quality Score</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">
-            Evaluate your resume against Applicant Tracking Systems to optimize your chances
+            Evaluate your resume quality to optimize your chances
           </p>
           <div className="flex items-center gap-2 text-primary font-semibold">
             <FileCheck className="w-5 h-5" />
-            <span>Check ATS Score</span>
+            <span>Check Quality Score</span>
           </div>
         </div>
 

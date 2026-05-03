@@ -147,7 +147,7 @@ export default function AtsScorePage() {
     industry_standards: { label: "Industry Standards", icon: Briefcase },
     genuine_skills: { label: "Skills Authenticity", icon: ShieldCheck },
     company_standards: { label: "Professionalism", icon: Building },
-    ats_readability: { label: "ATS Readability", icon: ScanSearch }
+    ats_readability: { label: "Resume Readability", icon: ScanSearch }
   };
 
   if (analysisResult) {
@@ -162,7 +162,7 @@ export default function AtsScorePage() {
               <Target className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-foreground">ATS Score Results</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-foreground">Resume Quality Score Results</h1>
               <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
                 <FileText className="w-4 h-4" /> {analysisResult.filename}
               </p>
@@ -180,7 +180,7 @@ export default function AtsScorePage() {
             {/* Background decoration */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
             
-            <h3 className="text-sm font-semibold text-muted-foreground mb-6 uppercase tracking-wider">ATS Match Score</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-6 uppercase tracking-wider">Resume Quality Score</h3>
             
             <GaugeMeter score={analysisResult.overall_score} />
             
@@ -333,9 +333,9 @@ export default function AtsScorePage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-purple-600 dark:from-primary/20 dark:to-purple-600/20 dark:border dark:border-primary/20 rounded-2xl p-6 md:p-8 text-white dark:text-foreground">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2">ATS Resume Intelligence</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">Resume Quality Score</h1>
         <p className="text-white/90 dark:text-muted-foreground text-sm md:text-base">
-          Ensure your resume passes through Applicant Tracking Systems. We analyze formatting, grammar, and relevance to generate a comprehensive readability score.
+          Ensure your resume quality is excellent. We analyze formatting, grammar, and relevance to generate a comprehensive readability score.
         </p>
       </div>
 
@@ -359,9 +359,9 @@ export default function AtsScorePage() {
             onDrop={handleDrop}
             className={`flex-1 relative border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer min-h-[280px]
               ${dragOver ? "border-primary bg-primary/5 scale-[1.01]" : "border-border hover:border-primary/50 hover:bg-muted/30"}`}
-            onClick={() => document.getElementById("ats-resume-upload").click()}
+            onClick={() => document.getElementById("resume-quality-upload").click()}
           >
-            <input id="ats-resume-upload" type="file" accept=".pdf,.docx,.txt" className="hidden"
+            <input id="resume-quality-upload" type="file" accept=".pdf,.docx,.txt" className="hidden"
               onChange={(e) => {
                 handleFileSelect(e.target.files[0]);
                 e.target.value = null;
@@ -403,9 +403,9 @@ export default function AtsScorePage() {
             <Award className="w-8 h-8 text-primary" />
           </div>
           
-          <h3 className="text-2xl font-bold text-foreground mb-4">Calculate ATS Compatibility</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-4">Calculate Resume Quality</h3>
           <p className="text-base text-muted-foreground mb-8 leading-relaxed">
-            Our specialized ATS parsing engine will read your resume exactly how an automated recruiter system does, providing an accurate match score.
+            Our specialized parsing engine will read your resume, providing an accurate quality score.
           </p>
           
           <Button 

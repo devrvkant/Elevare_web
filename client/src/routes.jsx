@@ -35,7 +35,7 @@ const router = createBrowserRouter([
           { path: "roadmaps/:id", Component: RoadmapPage },
           { path: "gap-analysis", Component: GapAnalysisPage },
           { path: "gap-analysis/:id", Component: GapAnalysisPage },
-          { path: "ats-score", Component: AtsScorePage },
+          { path: "resume-quality-score", Component: AtsScorePage },
           { path: "job-match", Component: JobMatchPage },
           { path: "profile", Component: ProfilePage },
         ],

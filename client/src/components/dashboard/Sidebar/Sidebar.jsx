@@ -28,10 +28,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       description: "Skill Gap Insights",
     },
     {
-      id: "ats-score",
-      label: "ATS Score",
+      id: "resume-quality-score",
+      label: "Resume Quality Score",
       icon: FileText,
-      path: "/dashboard/ats-score",
+      path: "/dashboard/resume-quality-score",
       description: "Resume Evaluation",
     },
     {
@@ -56,8 +56,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     if (path === "/dashboard/gap-analysis") {
       return location.pathname.startsWith("/dashboard/gap-analysis");
     }
-    if (path === "/dashboard/ats-score") {
-      return location.pathname.startsWith("/dashboard/ats-score");
+    if (path === "/dashboard/resume-quality-score") {
+      return location.pathname.startsWith("/dashboard/resume-quality-score");
     }
     if (path === "/dashboard/job-match") {
       return location.pathname.startsWith("/dashboard/job-match");
