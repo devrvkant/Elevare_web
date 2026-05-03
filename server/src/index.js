@@ -16,7 +16,7 @@ app.use(
     origin:
       config.nodeEnv === "development"
         ? ["http://localhost:5173"]
-        : ["https://elevare-client.onrender.com", "https://elevare.jangir.me"],
+        : ["https://elevare.jangir.me", "https://elevare-client.onrender.com"],
     credentials: true,
   })
 ); // prevent from CORS errors(allow cross origin access)
