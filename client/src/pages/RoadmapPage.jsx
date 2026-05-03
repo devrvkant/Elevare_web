@@ -6,7 +6,7 @@ import {
   AlertCircle,
   RefreshCw,
   Target,
-  Sparkles,
+  Compass,
   ExternalLink,
   Clock,
   Maximize2,
@@ -331,7 +331,7 @@ export default function RoadmapPage() {
               onClick={() => navigate("/dashboard")}
               className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              <Sparkles className="w-4 h-4 mr-2" />
+              <Compass className="w-4 h-4 mr-2" />
               Generate New Roadmap
             </Button>
             <Button
@@ -364,7 +364,7 @@ export default function RoadmapPage() {
           </Button>
 
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 sm:gap-3 pointer-events-none">
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             <span className="text-sm sm:text-base font-medium text-foreground truncate max-w-[150px] sm:max-w-none">
               {roadmapData?.title || roadmap.career || "Career Roadmap"}
             </span>

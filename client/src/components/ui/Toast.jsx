@@ -111,8 +111,8 @@ export default function ToastContainer() {
           }
         }
       `}</style>
-      <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-3 pointer-events-none">
-        <div className="flex flex-col gap-3 pointer-events-auto">
+      <div className="fixed bottom-4 right-4 z-[9999] flex flex-col-reverse gap-3 pointer-events-none">
+        <div className="flex flex-col-reverse gap-3 pointer-events-auto">
           {toasts.map((toast) => (
             <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
           ))}

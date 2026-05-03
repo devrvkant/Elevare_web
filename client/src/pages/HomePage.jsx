@@ -7,9 +7,10 @@ import {
   BarChart3,
   Briefcase,
   Rocket,
+  ArrowRight,
   TrendingUp,
-  Sparkles,
   Linkedin,
+  Heart,
 } from "lucide-react";
 import ThemeToggle from "../components/ui/ThemeToggle";
 
@@ -282,7 +283,7 @@ export default function Home() {
 
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 shadow-lg shadow-primary/20 mb-6">
-            <Sparkles className="w-8 h-8 text-primary" />
+            <Rocket className="w-8 h-8 text-primary" />
           </div>
           <h3 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Ready to Transform Your Career?
@@ -297,14 +298,14 @@ export default function Home() {
               onClick={() => navigate("/sign-up")}
               className="px-10 py-4 text-lg font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto cursor-pointer"
             >
-              Get Started for Free <Sparkles className="w-5 h-5" />
+              Get Started for Free <ArrowRight className="w-5 h-5 ml-2" />
             </button>
           ) : (
             <button
               onClick={() => navigate("/dashboard")}
               className="px-10 py-4 text-lg font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all transform hover:scale-105 shadow-2xl flex items-center gap-2 mx-auto cursor-pointer"
             >
-              Continue Your Journey <Sparkles className="w-5 h-5" />
+              Continue Your Journey <ArrowRight className="w-5 h-5 ml-2" />
             </button>
           )}
         </div>
@@ -390,9 +391,8 @@ export default function Home() {
               </p>
 
               {/* Made with love */}
-              <p className="text-muted-foreground text-sm text-center flex items-center gap-2">
-                Made with{" "}
-                <span className="text-red-500 animate-pulse">❤️</span> by
+              <p className="text-muted-foreground text-sm text-center flex items-center justify-center md:justify-start gap-1.5">
+                Made with <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" /> by
                 <span className="font-semibold text-primary">
                   Ravikant Jangir
                 </span>{" "}

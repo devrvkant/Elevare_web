@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import UserPopover from "./UserPopover";
 
 const MobileHeader = ({ onMenuClick }) => {
@@ -24,10 +24,10 @@ const MobileHeader = ({ onMenuClick }) => {
         </button>
 
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
-            <Sparkles className="w-5 h-5" strokeWidth={2.5} />
+          <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center text-primary border border-primary/20">
+            <TrendingUp className="w-5 h-5" strokeWidth={2.5} />
           </div>
-          <h1 className="text-lg font-bold text-primary">
+          <h1 className="text-xl font-black text-foreground tracking-tight">
             ELEVARE
           </h1>
         </div>

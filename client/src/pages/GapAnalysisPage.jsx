@@ -2,9 +2,10 @@ import { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import {
-  Upload, FileText, X, Sparkles, Loader2, Brain, Target,
+  Upload, FileText, X, Loader2, Brain, Target,
   TrendingUp, BookOpen, ArrowRight, CheckCircle2, AlertTriangle,
   XCircle, Lightbulb, ExternalLink, Clock, ChevronDown, ChevronUp,
+  FileSearch, Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,6 +59,13 @@ export default function GapAnalysisPage() {
        setAnalysisResult(null);
     }
   }, [id, fetchedAnalysis]);
+
+  // Clear extracted skills from redux state when navigating away
+  useEffect(() => {
+    return () => {
+      dispatch(resetExtraction());
+    };
+  }, [dispatch]);
 
   // Select resume file without extracting automatically
   const handleFileSelect = useCallback((selectedFile) => {
@@ -131,6 +139,12 @@ export default function GapAnalysisPage() {
   const removeSkill = (idx) => {
     const updated = extractedSkills.filter((_, i) => i !== idx);
     dispatch(setExtractedSkills(updated));
+  };
+
+  const removeFile = (e) => {
+    e.stopPropagation();
+    setFile(null);
+    dispatch(resetExtraction());
   };
 
   // Radar chart data from category scores
@@ -341,7 +355,7 @@ export default function GapAnalysisPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Upload Section */}
         <div className="bg-card rounded-2xl p-6 border border-border">
           <div className="flex items-center gap-3 mb-5">
@@ -364,15 +378,29 @@ export default function GapAnalysisPage() {
             onClick={() => document.getElementById("resume-upload").click()}
           >
             <input id="resume-upload" type="file" accept=".pdf,.docx,.txt" className="hidden"
-              onChange={(e) => handleFileSelect(e.target.files[0])} />
+              onChange={(e) => {
+                handleFileSelect(e.target.files[0]);
+                e.target.value = null;
+              }} />
             {file && extractionStatus !== "loading" ? (
-              <div className="space-y-2">
-                <FileText className="w-10 h-10 text-primary mx-auto" />
-                <p className="text-sm font-medium text-foreground">{file.name}</p>
+              <div className="space-y-4 w-full max-w-sm mx-auto">
+                <div className="relative inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full mx-auto">
+                  <FileText className="w-10 h-10 text-primary" />
+                  <button onClick={removeFile} className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full p-1.5 hover:scale-110 transition-transform shadow-lg cursor-pointer">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="bg-background border border-border rounded-xl p-3 shadow-sm">
+                  <p className="text-sm font-bold text-foreground truncate px-2">{file.name}</p>
+                </div>
                 {extractedSkills.length > 0 ? (
-                  <p className="text-xs text-emerald-500 font-medium">✓ Skills extracted</p>
+                  <div className="inline-flex items-center gap-2 text-sm text-emerald-500 font-medium bg-emerald-500/10 px-3 py-1 rounded-full">
+                    <CheckCircle2 className="w-4 h-4" /> Skills extracted
+                  </div>
                 ) : (
-                  <p className="text-xs text-muted-foreground font-medium">Ready to extract</p>
+                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground font-medium bg-muted px-3 py-1 rounded-full">
+                    <FileText className="w-4 h-4" /> Ready to extract
+                  </div>
                 )}
               </div>
             ) : (
@@ -393,7 +421,7 @@ export default function GapAnalysisPage() {
                 {extractionStatus === 'loading' ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" />Extracting Skills...</>
                 ) : (
-                  <><Sparkles className="w-4 h-4 mr-2" />Extract Skills from Resume</>
+                  <><FileSearch className="w-4 h-4 mr-2" />Extract Skills from Resume</>
                 )}
              </Button>
           )}
@@ -473,33 +501,13 @@ export default function GapAnalysisPage() {
             {isAnalyzing ? (
               <><Loader2 className="w-5 h-5 animate-spin mr-2" />Analyzing Gaps...</>
             ) : (
-              <><Sparkles className="w-5 h-5 mr-2" />Analyze Career Gap</>
+              <><Activity className="w-5 h-5 mr-2" />Analyze Career Gap</>
             )}
           </Button>
         </div>
       </div>
 
-      {/* How It Works */}
-      <div className="bg-card rounded-2xl p-6 border border-border">
-        <h3 className="text-lg font-bold text-foreground mb-4">How It Works</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { icon: FileText, title: "Upload Resume", desc: "AI extracts your current skills from your resume automatically" },
-            { icon: Brain, title: "AI Analysis", desc: "Gemini AI compares your skills against career requirements" },
-            { icon: TrendingUp, title: "Get Insights", desc: "View detailed gaps, charts, and actionable recommendations" },
-          ].map((item, i) => (
-            <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-muted/50">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                <item.icon className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-foreground mb-1">{item.title}</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
     </div>
   );
 }

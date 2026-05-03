@@ -22,7 +22,7 @@ import {
   setError,
 } from "@/features/career/careerSlice";
 import { useGenerateRoadmapMutation } from "@/features/rodemap/roadmapApi";
-import { X, Sparkles, TrendingUp, Loader2 } from "lucide-react";
+import { X, Activity, TrendingUp, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/lib/toast";
 
@@ -192,9 +192,12 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
           <DialogHeader className="space-y-2">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shadow-sm">
-                <Sparkles className="w-6 h-6 text-primary" />
+                <TrendingUp className="w-6 h-6 text-primary" />
               </div>
               <div>
+                <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider mb-1">
+                  Recommended Path
+                </p>
                 <DialogTitle className="text-left text-foreground">
                   AI Career Prediction
                 </DialogTitle>
@@ -303,8 +306,8 @@ export default function CareerPredictionModal({ open, onOpenChange }) {
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Predict My Career
+                  <Activity className="w-5 h-5 mr-2" />
+                  <span>Analyze Profile</span>
                 </>
               )}
             </Button>

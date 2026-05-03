@@ -5,11 +5,11 @@ import {
   ArrowRight,
   Brain,
   Map,
-  Clock,
   GitCompareArrows,
-  Bookmark,
-  Lightbulb,
-  Target,
+  FileText,
+  Briefcase,
+  Activity,
+  FileCheck,
 } from "lucide-react";
 import CareerPredictionModal from "../components/dashboard/Career/CareerPredictionModal";
 import { useNavigate } from "react-router";
@@ -52,7 +52,7 @@ const Dashboard = () => {
             education, and interests
           </p>
           <div className="flex items-center gap-2 text-primary font-semibold">
-            <Sparkles className="w-5 h-5" />
+            <Activity className="w-5 h-5" />
             <span>Start Prediction</span>
           </div>
         </div>
@@ -94,122 +94,55 @@ const Dashboard = () => {
             Upload your resume and discover skill gaps for your target career with AI insights
           </p>
           <div className="flex items-center gap-2 text-primary font-semibold">
-            <Sparkles className="w-5 h-5" />
+            <GitCompareArrows className="w-5 h-5" />
             <span>Analyze Skills</span>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Section - Recent Activity & Quick Tips */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Activity */}
-        <div className="lg:col-span-2 bg-card rounded-2xl p-6 border border-border">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <Clock className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">
-                Recent Activity
-              </h3>
+        {/* ATS Score Card */}
+        <div
+          onClick={() => navigate("/dashboard/ats-score")}
+          className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer"
+        >
+          <div className="flex items-start justify-between mb-6">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <FileText className="w-8 h-8 text-primary" strokeWidth={2.5} />
             </div>
+            <ArrowRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
           </div>
-
-          <div className="space-y-3">
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted hover:bg-primary/10 transition-colors">
-              <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Brain className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground">
-                  Ready to start?
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Begin your career journey by creating your first prediction
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Map className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground">
-                  Roadmaps Awaiting
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Generate personalized learning paths after your prediction
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground">
-                  Track Your Progress
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Monitor your career development journey in real-time
-                </p>
-              </div>
-            </div>
+          <h2 className="text-2xl font-bold text-foreground mb-3">ATS Score</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            Evaluate your resume against Applicant Tracking Systems to optimize your chances
+          </p>
+          <div className="flex items-center gap-2 text-primary font-semibold">
+            <FileCheck className="w-5 h-5" />
+            <span>Check ATS Score</span>
           </div>
         </div>
 
-        {/* Quick Tips */}
-        <div className="bg-card rounded-2xl p-6 border border-border">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Lightbulb className="w-5 h-5 text-primary" />
+        {/* Job Match Card */}
+        <div
+          onClick={() => navigate("/dashboard/job-match")}
+          className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer"
+        >
+          <div className="flex items-start justify-between mb-6">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <Briefcase className="w-8 h-8 text-primary" strokeWidth={2.5} />
             </div>
-            <h3 className="text-xl font-bold text-foreground">Quick Tips</h3>
+            <ArrowRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
           </div>
-
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <Bookmark className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground mb-1">
-                  Be Specific
-                </p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Provide detailed information about your skills and interests
-                  for better predictions
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Bookmark className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground mb-1">
-                  Multiple Skills
-                </p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  List all relevant skills to get comprehensive career
-                  recommendations
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Bookmark className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground mb-1">
-                  Explore Roadmaps
-                </p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Follow your personalized roadmap step-by-step for best results
-                </p>
-              </div>
-            </div>
+          <h2 className="text-2xl font-bold text-foreground mb-3">Job Match</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            Paste a job description and compare it with your resume to get a match percentage
+          </p>
+          <div className="flex items-center gap-2 text-primary font-semibold">
+            <Briefcase className="w-5 h-5" />
+            <span>Match Resume</span>
           </div>
         </div>
       </div>
+
+
 
       {/* Career Prediction Modal */}
       <CareerPredictionModal open={modalOpen} onOpenChange={setModalOpen} />

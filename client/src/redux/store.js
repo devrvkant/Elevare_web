@@ -6,6 +6,7 @@ import roadmapReducer from "../features/rodemap/roadmapSlice";
 import { roadmapApi } from "../features/rodemap/roadmapApi";
 import gapAnalysisReducer from "../features/gapAnalysis/gapAnalysisSlice";
 import { gapAnalysisApi } from "../features/gapAnalysis/gapAnalysisApi";
+import { jobMatchApi } from "../features/jobMatch/jobMatchApi";
 
 export const store = configureStore({
   reducer: {
@@ -16,10 +17,13 @@ export const store = configureStore({
     [careerApi.reducerPath]: careerApi.reducer,
     [roadmapApi.reducerPath]: roadmapApi.reducer,
     [gapAnalysisApi.reducerPath]: gapAnalysisApi.reducer,
+    [jobMatchApi.reducerPath]: jobMatchApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(careerApi.middleware)
       .concat(roadmapApi.middleware)
-      .concat(gapAnalysisApi.middleware),
+      .concat(gapAnalysisApi.middleware)
+      .concat(jobMatchApi.middleware),
 });
+

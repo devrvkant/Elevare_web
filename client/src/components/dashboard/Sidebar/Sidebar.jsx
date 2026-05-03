@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router";
-import { LayoutDashboard, Map, User, X, Sparkles, GitCompareArrows, FileText } from "lucide-react";
+import { LayoutDashboard, Map, User, X, Sparkles, GitCompareArrows, FileText, Briefcase, TrendingUp } from "lucide-react";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
     {
       id: "gap-analysis",
-      label: "Gap Analysis",
+      label: "Career Gap Analysis",
       icon: GitCompareArrows,
       path: "/dashboard/gap-analysis",
       description: "Skill Gap Insights",
@@ -33,6 +33,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       icon: FileText,
       path: "/dashboard/ats-score",
       description: "Resume Evaluation",
+    },
+    {
+      id: "job-match",
+      label: "Job Match",
+      icon: Briefcase,
+      path: "/dashboard/job-match",
+      description: "JD vs Resume",
     },
     {
       id: "profile",
@@ -51,6 +58,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     }
     if (path === "/dashboard/ats-score") {
       return location.pathname.startsWith("/dashboard/ats-score");
+    }
+    if (path === "/dashboard/job-match") {
+      return location.pathname.startsWith("/dashboard/job-match");
     }
     return location.pathname === path;
   };
@@ -88,14 +98,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </button>
 
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-violet-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-              <Sparkles className="w-7 h-7" strokeWidth={2.5} />
+            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary border border-primary/20 shadow-sm">
+              <TrendingUp className="w-7 h-7" strokeWidth={2.5} />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-black text-foreground tracking-tight">
                 ELEVARE
               </h1>
-              <p className="text-xs text-sidebar-foreground/70 font-medium">COACH AGENT</p>
+              <p className="text-[10px] text-primary font-bold uppercase tracking-widest">CAREER PORTAL</p>
             </div>
           </div>
           <p className="text-xs text-sidebar-foreground/50 mt-3 italic">
@@ -149,11 +159,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {/* Footer */}
         <div className="p-4 border-t border-sidebar-border">
           <div className="bg-sidebar-accent/50 rounded-xl p-4 border border-sidebar-border text-center">
-            <p className="text-sm font-medium bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent mb-1">
-              Made with ❤️
+            <p className="text-sm font-medium text-sidebar-foreground mb-1">
+              Made By
             </p>
             <p className="text-xs text-sidebar-foreground/70">
-              by <span className="font-semibold text-sidebar-primary">Ravikant</span>{" "}
+              <span className="font-semibold text-sidebar-primary">Ravikant</span>{" "}
               & <span className="font-semibold text-sidebar-primary">Divyam</span>
             </p>
           </div>

@@ -10,6 +10,7 @@ import RoadmapsPage from "./pages/RoadmapsPage";
 import RoadmapPage from "./pages/RoadmapPage";
 import GapAnalysisPage from "./pages/GapAnalysisPage";
 import AtsScorePage from "./pages/AtsScorePage";
+import JobMatchPage from "./pages/JobMatchPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
           { path: "gap-analysis", Component: GapAnalysisPage },
           { path: "gap-analysis/:id", Component: GapAnalysisPage },
           { path: "ats-score", Component: AtsScorePage },
+          { path: "job-match", Component: JobMatchPage },
           { path: "profile", Component: ProfilePage },
         ],
       },

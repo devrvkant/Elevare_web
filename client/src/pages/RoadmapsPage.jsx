@@ -4,7 +4,7 @@ import {
   Clock,
   TrendingUp,
   Plus,
-  Sparkles,
+  Compass,
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -136,7 +136,7 @@ export default function RoadmapsPage() {
             onClick={() => navigate("/dashboard")}
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
-            <Sparkles className="w-5 h-5 mr-2" />
+            <Compass className="w-5 h-5 mr-2" />
             Generate First Roadmap
           </Button>
         </div>

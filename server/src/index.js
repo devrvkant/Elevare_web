@@ -5,12 +5,13 @@ import connectToMongoDB from "./lib/mongoDB.js";
 import careerRouter from "./routes/carrer.routes.js";
 import roadmapRouter from "./routes/roadmap.routes.js";
 import gapAnalysisRouter from "./routes/gapAnalysis.routes.js";
+import jobMatchRouter from "./routes/jobMatch.routes.js";
 
 const PORT = config.port || 5500;
 const app = express();
 
 // using middlewares
-app.use(express.json()); // allow us to parse incoming requests :- req.body
+app.use(express.json({ limit: "5mb" })); // allow us to parse incoming requests :- req.body
 app.use(
   cors({
     origin:
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/career", careerRouter);
 app.use("/api/roadmap", roadmapRouter);
 app.use("/api/gap-analysis", gapAnalysisRouter);
+app.use("/api/job-match", jobMatchRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT : ${PORT}`);
