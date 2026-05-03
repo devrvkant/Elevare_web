@@ -1,15 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Upload, FileText, X, Loader2, CheckCircle2, AlertTriangle,
   Briefcase, ClipboardPaste, ArrowRight, Zap, TrendingUp,
   Hash, Lightbulb, RotateCcw, Building2, UserCheck,
-  ChevronRight, BarChart3, Target, FileSearch
+  ChevronRight, BarChart3, Target, FileSearch, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { config } from "@/config/env";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAnalyzeJobMatchMutation } from "@/features/jobMatch/jobMatchApi";
 import { toast } from "@/lib/toast";
+import { useDashboard } from "@/layouts/DashboardLayout";
 
 /* ─── Circular Ring Score ─── */
 const RingScore = ({ score, size = 200 }) => {
@@ -78,6 +79,7 @@ const ExperienceBadge = ({ match }) => {
 export default function JobMatchPage() {
   const { currentUser } = useAuth();
   const userId = currentUser?.uid;
+  const { setShowHeader } = useDashboard();
 
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
@@ -85,6 +87,11 @@ export default function JobMatchPage() {
   const [extractedSkills, setExtractedSkills] = useState([]);
   const [extracting, setExtracting] = useState(false);
   const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    setShowHeader(!result);
+    return () => setShowHeader(true);
+  }, [result, setShowHeader]);
 
   const [analyzeJobMatch, { isLoading: isAnalyzing }] = useAnalyzeJobMatchMutation();
 
@@ -144,20 +151,21 @@ export default function JobMatchPage() {
   if (result) {
     return (
       <div className="space-y-6 pb-10">
-        {/* Header Bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <div className="p-2 bg-indigo-500/10 rounded-lg"><Briefcase className="w-5 h-5 text-indigo-500" /></div>
-              <h1 className="text-2xl font-bold text-foreground">{result.jobTitle || "Job Match"}</h1>
-            </div>
-            <p className="text-muted-foreground text-sm flex items-center gap-2 ml-12">
-              <Building2 className="w-3.5 h-3.5" />{result.company || "Company"}
-            </p>
+        {/* Header Bar / Top Bar */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card p-4 md:p-6 rounded-2xl border border-border shadow-sm mb-6">
+          <div className="flex items-center gap-4">
+             <Button onClick={handleReset} variant="outline" className="p-2 sm:px-4 sm:py-2 h-auto sm:h-10 border-border text-foreground hover:bg-accent transition-all cursor-pointer">
+                <ArrowLeft className="w-5 h-5 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Back</span>
+             </Button>
+             <div>
+               <h1 className="text-xl md:text-2xl font-bold text-foreground">Job Match Report</h1>
+               <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
+                 <Briefcase className="w-4 h-4" /> {result.jobTitle || "Job Match"}
+                 <Building2 className="w-4 h-4 ml-2 hidden sm:block" /> <span className="hidden sm:inline">{result.company || "Company"}</span>
+               </p>
+             </div>
           </div>
-          <Button onClick={handleReset} variant="outline" className="border-border cursor-pointer">
-            <RotateCcw className="w-4 h-4 mr-2" />New Match
-          </Button>
         </div>
 
         {/* Score + Verdict Row */}

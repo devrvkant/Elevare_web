@@ -5,16 +5,30 @@ import Sidebar from "../components/dashboard/Sidebar/Sidebar";
 import MobileHeader from "../components/dashboard/MobileHeader";
 import UserPopover from "../components/dashboard/UserPopover";
 import ThemeToggle from "../components/ui/ThemeToggle";
+import { createContext, useContext } from "react";
+
+export const DashboardContext = createContext({
+  setShowHeader: () => {},
+});
+
+export const useDashboard = () => useContext(DashboardContext);
 
 const DashboardLayout = () => {
   const { currentUser } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
   const location = useLocation();
 
   // Check if we're on a roadmap detail page (not the list page)
   const isRoadmapDetailPage =
     location.pathname.startsWith("/dashboard/roadmaps/") &&
     location.pathname !== "/dashboard/roadmaps";
+
+  const isGapAnalysisDetailPage = 
+    location.pathname.startsWith("/dashboard/gap-analysis/") &&
+    location.pathname !== "/dashboard/gap-analysis";
+
+  const shouldHideDesktopHeader = isRoadmapDetailPage || isGapAnalysisDetailPage || !showHeader;
 
   return (
     <div className="h-screen bg-background flex overflow-hidden">
@@ -26,8 +40,8 @@ const DashboardLayout = () => {
         {/* Mobile Header */}
         <MobileHeader onMenuClick={() => setSidebarOpen(true)} />
 
-        {/* Desktop Header - Hide on roadmap detail page */}
-        {!isRoadmapDetailPage && (
+        {/* Desktop Header - Hide on roadmap detail page or when requested by child */}
+        {!shouldHideDesktopHeader && (
           <header className="hidden lg:block bg-card border-b border-border flex-shrink-0">
             <div className="px-8 py-4 flex justify-between items-center">
               <div>
@@ -48,15 +62,17 @@ const DashboardLayout = () => {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto">
-          {isRoadmapDetailPage ? (
-            // Full-width layout for roadmap detail page
-            <Outlet />
-          ) : (
-            // Padded container for other pages
-            <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+          <DashboardContext.Provider value={{ setShowHeader }}>
+            {isRoadmapDetailPage ? (
+              // Full-width layout for roadmap detail page
               <Outlet />
-            </div>
-          )}
+            ) : (
+              // Padded container for other pages
+              <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+                <Outlet />
+              </div>
+            )}
+          </DashboardContext.Provider>
         </main>
       </div>
     </div>

@@ -1,13 +1,14 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Upload, FileText, X, Loader2, Award,
   CheckCircle2, AlertTriangle, XCircle, FileCheck, ArrowRight, Brain,
   BookOpen, Layout, Briefcase, ShieldCheck, Building, ScanSearch,
-  Target, Zap, Activity, Lightbulb, TrendingUp
+  Target, Zap, Activity, Lightbulb, TrendingUp, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { config } from "@/config/env";
 import { toast } from "@/lib/toast";
+import { useDashboard } from "@/layouts/DashboardLayout";
 
 const GaugeMeter = ({ score }) => {
   const radius = 60;
@@ -76,10 +77,16 @@ const CategoryCard = ({ label, score, icon: Icon }) => {
 };
 
 export default function AtsScorePage() {
+  const { setShowHeader } = useDashboard();
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
+
+  useEffect(() => {
+    setShowHeader(!analysisResult);
+    return () => setShowHeader(true);
+  }, [analysisResult, setShowHeader]);
 
   const handleFileSelect = useCallback((selectedFile) => {
     if (!selectedFile) return;
@@ -155,22 +162,20 @@ export default function AtsScorePage() {
     
     return (
       <div className="space-y-8 pb-10">
-        {/* Header Action */}
+        {/* Header Action / Top Bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card p-4 md:p-6 rounded-2xl border border-border shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary/10 rounded-xl">
-              <Target className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold text-foreground">Resume Quality Score Results</h1>
-              <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
-                <FileText className="w-4 h-4" /> {analysisResult.filename}
-              </p>
-            </div>
+             <Button onClick={handleReset} variant="outline" className="p-2 sm:px-4 sm:py-2 h-auto sm:h-10 border-border text-foreground hover:bg-accent transition-all cursor-pointer">
+                <ArrowLeft className="w-5 h-5 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Back</span>
+             </Button>
+             <div>
+               <h1 className="text-xl md:text-2xl font-bold text-foreground">Resume Quality Report</h1>
+               <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
+                 <FileText className="w-4 h-4" /> {analysisResult.filename}
+               </p>
+             </div>
           </div>
-          <Button onClick={handleReset} variant="outline" className="border-border text-foreground hover:bg-accent cursor-pointer">
-            <Activity className="w-4 h-4 mr-2" /> Score Another
-          </Button>
         </div>
 
         {/* Top Highlight Section */}
