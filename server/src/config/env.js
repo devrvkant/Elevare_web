@@ -7,4 +7,5 @@ export const config = {
     mongoDbUri: process.env.MONGODB_URI,
     elevareAiApiKey: process.env.ELEVARE_AI_API_KEY,
     flaskApiUrl: process.env.FLASK_API_URL,
+    nodeEnv: process.env.NODE_ENV || "production",
 }
